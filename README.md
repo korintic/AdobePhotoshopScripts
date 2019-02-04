@@ -16,7 +16,7 @@ When used the script will change the layer to the color id layer and active tool
 ColorIDPicker is meant to be used bind to a shortcut for efficiency.
 
 **Save script to:**  
-***C:\Program Files\Adobe\ (your photoshop version e.g. Adobe Photoshop CC 2018)\Presets\Scripts*
+*C:\Program Files\Adobe\ (your photoshop version e.g. Adobe Photoshop CC 2018)\Presets\Scripts*
 
 **Open Photoshop and set a hotkey for the script at:**  
 *Edit>Keyboard Shortcuts => [Shortcuts for: Application Menus] File> Scripts> ColorIDPicker*
