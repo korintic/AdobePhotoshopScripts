@@ -4,8 +4,8 @@ Collection of simple Photoshops scripts written to improve workflow and learn Ja
 
 ## Photoshop Scripts
 
-These scripts can be used through File>Scripts>Browse or saving the scripts to `C:\Program Files\Adobe\ (your photoshop version e.g. Adobe Photoshop CC 2018)\Presets\Scripts` which requires admin rights.
-The latter way is necessary for binding scripts to hotkeys as scripts saved in the scripts folder are available through the File>Scripts menu and can be bound to a shortcut through `Edit>Keyboard Shortcuts => [Shortcuts for: Application Menus] File> Scripts> (Your script name)`.
+These scripts can be used through File>Scripts>Browse or saving the scripts to *C:\Program Files\Adobe\ (your photoshop version e.g. Adobe Photoshop CC 2018)\Presets\Scripts* which requires admin rights.
+The latter way is necessary for binding scripts to hotkeys as scripts saved in the scripts folder are available through the *File>Scripts* menu and can be bound to a shortcut through *Edit>Keyboard Shortcuts => [Shortcuts for: Application Menus] File> Scripts> (Your script name)*.
 
 ### ColorIDPicker
 
@@ -15,11 +15,11 @@ ColorIDPicker is a Photoshop workflow script that allow the user to quickly make
 When used the script will change the layer to the color id layer and active tool to magic wand and when ran again it will return the user to the previously selected layer and tool.
 ColorIDPicker is meant to be used bind to a shortcut for efficiency.
 
-Save script to:  
-`C:\Program Files\Adobe\ (your photoshop version e.g. Adobe Photoshop CC 2018)\Presets\Scripts`
+**Save script to:**  
+***C:\Program Files\Adobe\ (your photoshop version e.g. Adobe Photoshop CC 2018)\Presets\Scripts*
 
-Open Photoshop and set a hotkey for the script at:  
-`Edit>Keyboard Shortcuts => [Shortcuts for: Application Menus] File> Scripts> ColorIDPicker`
+**Open Photoshop and set a hotkey for the script at:**  
+*Edit>Keyboard Shortcuts => [Shortcuts for: Application Menus] File> Scripts> ColorIDPicker*
 
 [IMAGE HERE] Photoshop UI
 
