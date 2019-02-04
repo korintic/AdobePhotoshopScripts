@@ -25,7 +25,7 @@ ColorIDPicker is meant to be used bind to a shortcut for efficiency.
 
 Make sure the file you're working with has a layer called ColorID 
 (this name can be changed by opening the script in a plain text editor like notepad and following the instruction at the top of the file).
-In the script file you can also change whether you want the ColorIDPicker to layer and/or selection visibility when used.
+In the script file you can also change whether you want the ColorIDPicker to toggle layer and/or selection visibility when used.
 
 ![Changeable variables](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ChangeableVariables.png "ColorIDPicker.cs")
 
