@@ -12,7 +12,7 @@ var toggleSelectionVisibility = false; // or true
 
 //If active layer is not a normal layer it's layer mask will be selected if it exists
 //When 'alwaysSelectLayerMask' is set to true layer mask will be selected on normal layers as well
-var alwaysSelectLayerMask = true; // or true
+var alwaysSelectLayerMask = false; // or true
 
 var doc;
 var idLayer;
