@@ -7,6 +7,8 @@ Collection of simple Photoshops scripts written to improve workflow and learn Ja
 These scripts can be used through File>Scripts>Browse or saving the scripts to *C:\Program Files\Adobe\ (your photoshop version e.g. Adobe Photoshop CC 2018)\Presets\Scripts* which requires admin rights.
 The latter way is necessary for binding scripts to hotkeys as scripts saved in the scripts folder are available through the *File>Scripts* menu and can be bound to a shortcut through *Edit>Keyboard Shortcuts => [Shortcuts for: Application Menus] File> Scripts> (Your script name)*.
 
+---
+
 ### ColorIDPicker
 
 [IMAGE HERE] Header image
