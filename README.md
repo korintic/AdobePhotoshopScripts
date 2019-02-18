@@ -21,8 +21,6 @@ ColorIDPicker is meant to be used bind to a shortcut for efficiency.
 **Open Photoshop and set a hotkey for the script at:**  
 *Edit>Keyboard Shortcuts => [Shortcuts for: Application Menus] File> Scripts> ColorIDPicker*
 
-[IMAGE HERE] Photoshop UI
-
 Make sure the file you're working with has a layer called ColorID 
 (this name can be changed by opening the script in a plain text editor like notepad and following the instruction at the top of the file).
 In the script file you can also change whether you want the ColorIDPicker to toggle layer and/or selection visibility when used.
