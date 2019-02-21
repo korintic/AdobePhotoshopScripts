@@ -32,21 +32,17 @@ function pickColorID() {
 
   if (idLayer == undefined) {
     alert(idName + " layer not found!");
+  } else if (!PreferencesExist()) {
+  // If saved state not found save state and apply colorpicker state
+    captureState();
+    setState();
+  }
+  // If saved state found and document name matches apply saved state
+  else if (savedState.getString(3) != doc.name){
+    captureState();
+    setState();
   } else {
-    // If saved state not found save state and apply colorpicker state
-    if (!PreferencesExist()) {
-      captureState();
-      setState();
-    }
-    // If saved state found and document name matches apply saved state
-    else {
-      if (savedState.getString(3) != doc.name) {
-        captureState();
-        setState();
-      } else {
-        restoreState();
-      }
-    }
+    restoreState();
   }
 }
 
