@@ -9,7 +9,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 
 ### ColorIDPicker
 
-[IMAGE HERE] Header image
+![Header image](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPicker.png "Header image")
 
 ColorIDPicker is a Photoshop workflow script that allow the user to quickly make selections from a color id layer.
 When used the script will change the layer to the color id layer and active tool to magic wand and when ran again it will return the user to the previously selected layer and tool.
