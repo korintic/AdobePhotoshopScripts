@@ -1,17 +1,17 @@
 // Name of the color ID layer
-var idName = "ColorID"; // replace 'ColorID' with your desired ID layer name e.g 'My layer name'
+var idLayerName = "ColorID"; // replace 'ColorID' with your desired ID layer name e.g 'My layer name'
 
 // Color ID layer visibility toggle
-//If true the visibility of layers will be toggled like alt+clicking the visibility icon of ID layer in Layers panel
+// If true the visibility of layers will be toggled like alt+clicking the visibility icon of ID layer in Layers panel
 var toggleLayerVisibility = true; // or false
 
-//Selection visibility toggle
-//If true the selection visibility "marching ants" will be toggled when entering/exiting ID picking
-//Works like ctrl+H
-var toggleSelectionVisibility = false; // or true
+// Selection visibility toggle
+// If true the selection visibility "marching ants" will be toggled when entering/exiting ID picking
+// Works like ctrl+H
+var toggleSelectionVisibility = true; // or true
 
-//If active layer is not a normal layer it's layer mask will be selected if it exists
-//When 'alwaysSelectLayerMask' is set to true layer mask will be selected on normal layers as well
+// If active layer is not a normal paint layer the layer's layer mask will be selected if it exists
+// When 'alwaysSelectLayerMask' is set to true layer mask will be selected on normal layers as well
 var alwaysSelectLayerMask = false; // or true
 
 var doc;
@@ -28,10 +28,10 @@ function pickColorID() {
 
   doc = app.activeDocument;
 
-  idLayer = getLayerIDByName(idName);
+  idLayer = getLayerIDByName(idLayerName);
 
   if (idLayer == undefined) {
-    alert(idName + " layer not found!");
+    alert(idLayerName + " layer not found!");
   } else if (!PreferencesExist()) {
   // If saved state not found save state and apply colorpicker state
     captureState();
@@ -50,7 +50,7 @@ function captureState() {
   var desc = new ActionDescriptor();
 
   desc.putString(0, currentTool);
-  desc.putString(1, getLayerIDByName(doc.activeLayer.name));
+  desc.putInteger(1, doc.activeLayer.id);
   desc.putBoolean(2, doc.activeLayer.visible);
   desc.putString(3, doc.name);
   app.putCustomOptions("ColorIDPicker", desc, true);
@@ -73,7 +73,7 @@ function restoreState() {
   if (toggleLayerVisibility) {
     showOnlyLayerByID(idLayer);
   }
-  selectLayerByID(savedState.getString(1));
+  selectLayerByID(savedState.getInteger(1));
   if (!savedState.getBoolean(2) && toggleLayerVisibility) {
     hideLayerByID(savedState.getString(1));
   }
