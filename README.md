@@ -44,7 +44,7 @@ To change the name of used for the selections layer find the line **var idLayerN
 It is possible to change whether the ColorIDPicker toggles layer and selection edge ("marching ants") visibility when used by changing the lines: **var toggleLayerVisibility = true;** and **var toggleSelectionVisibility = true;**.
 Replacing the word **'true'** with **'false'** will turn these features off.
 
-Toggling layer visibility works like alt+clicking on later visibility icon in the Layers panel(so the previous state will be lost if layer visibility is changed manually while in pick mode).
+Toggling layer visibility works like alt+clicking on layer visibility icon in the Layers panel(so the previous state will be lost if layer visibility is changed manually while in pick mode).
 The selection edge visibility toggle works like ctrl+H.
 
 If the active layer is not a normal paint layer the script will select this layer's layer mask if it has one. 
