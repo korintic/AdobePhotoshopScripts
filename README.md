@@ -37,9 +37,9 @@ To change the name of used for the selections layer find the line **var idLayerN
 
 #### Compinations of different preferences:
 
-![Preferences 1](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences1.png "Preferences 1")![Preferences 2](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences2.png "Preferences 2")
+![Preferences 1](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences1.gif "Preferences 1")![Preferences 2](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences2.gif "Preferences 2")
 
-![Preferences 3](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences3.png "Preferences 3")![Preferences 4](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences4.png "Preferences 4")
+![Preferences 3](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences3.gif "Preferences 3")![Preferences 4](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences4.gif "Preferences 4")
 
 It is possible to change whether the ColorIDPicker toggles layer and selection edge ("marching ants") visibility when used by changing the lines: **var toggleLayerVisibility = true;** and **var toggleSelectionVisibility = true;**.
 Replacing the word 'true' with 'false' will turn these features off.
