@@ -7,6 +7,10 @@ Collection of simple Photoshops scripts written to improve workflow and learn Ja
 These scripts can be used through File>Scripts>Browse or saving the scripts to *C:\Program Files\Adobe\ (your photoshop version e.g. Adobe Photoshop CC 2018)\Presets\Scripts* which requires admin rights.
 The latter way is necessary for binding scripts to hotkeys as scripts saved in the scripts folder are available through the *File>Scripts* menu and can be bound to a shortcut through *Edit>Keyboard Shortcuts => [Shortcuts for: Application Menus] File> Scripts> (Your script name)*.
 
+#### Scripts:
+* ColorIDPicker
+* QuickExportPNG
+
 ---
 
 ### ColorIDPicker
@@ -58,3 +62,10 @@ Replace **var alwaysSelectLayerMask = false;** from **'false'** to **'true'** fo
 Usually in this workflow the flat color layer has hard edges without anti-aliasing for precise selections. 
 For correct results the Magic Wand tool settings should be set so that anti-aliasing is off and tolerance is set to zero.
 This is not forced by the script however so it is up to the user to set their Magic Wand tool properties.
+
+---
+
+### QuickExportPNG
+
+Simple workflow script done for quickly exporting and resizing PNGs according to naming conventions and project folder structure.
+Destination path variable **_folder** needs editing so that it points to the correct folder on per project basis.
