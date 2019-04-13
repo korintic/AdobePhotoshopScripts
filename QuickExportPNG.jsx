@@ -1,7 +1,8 @@
 var _folder = "C:/Users/userName/Desktop/Textures"; // Path to the root folder of textures in a project
-var _isResizedByPrefix = false; // Set to true to resize image on export based on export target name and resize rules
+var _isResizedByPrefix = true; // Set to true to resize image on export based on export target name and resize rules
 var _saveInRoot = false; // Always save the root folder if subfolder is not found
 
+// _resizeRules with example size prefix pairs
 var _resizeRules = {
     64:  ["Icon_"],
     128: ["Prop_"],
@@ -28,7 +29,7 @@ function QuickExport() {
     }
     doc = app.activeDocument;
 
-    // Uses the active layer name as the target if no layer is selected uses the top layer
+    // Uses the active layer name as the target –if no layer is selected uses the top layer
     // If preferrable to always use top layer name or bottom layer name as export target name use:
     // targetName = doc.layers[0].name; // top layer
     // targetName = doc.layers[doc.layers.length - 1].name; // bottom layer
