@@ -68,4 +68,5 @@ This is not forced by the script however so it is up to the user to set their Ma
 ### QuickExportPNG
 
 Simple workflow script done for quickly exporting and resizing PNGs according to naming conventions and project folder structure.
-Destination path variable **_folder** needs editing so that it points to the correct folder on per project basis.
+Destination path variable **_folder** should be edited to point at the the correct folder on per project basis.
+The script uses the active layer name as the target name for exporting. It will by default try to find a subfolder that matches the start of the target name to save to and will prompt the user if a subfolder is not found. This behaviour can be changed so that if matching subfolder is not found the image will be always saved to the root folder by changing **_saveInRoot** to **"true"**. The script will also by default resize the exported image if it's name's beginning matches a prefix defined in **_resizeRules** object. To disable resizing **_isResizedByPrefix** should be set to **"false"**.
