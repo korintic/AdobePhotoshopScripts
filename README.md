@@ -39,7 +39,7 @@ It is possible to change the default behaviour of ColorIDPicker by opening the s
 
 To change the name of used for the selections layer find the line **var idLayerName = "ColorID";** near the top of the script file and change the text **"ColorID"** inside the quotation marks to the desired layer name.
 
-#### Compinations of different preferences:
+#### Combinations of different preferences:
 
 ![Preferences 1](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences1.gif "Preferences 1")![Preferences 2](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences2.gif "Preferences 2")
 
