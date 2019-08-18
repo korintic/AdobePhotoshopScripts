@@ -9,6 +9,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 
 #### Scripts:
 * ColorIDPicker
+* ChangeColorOnSelected
 * QuickExportPNG
 
 ---
@@ -62,6 +63,16 @@ Replace **var alwaysSelectLayerMask = false;** from **'false'** to **'true'** fo
 Usually in this workflow the flat color layer has hard edges without anti-aliasing for precise selections. 
 For correct results the Magic Wand tool settings should be set so that anti-aliasing is off and tolerance is set to zero.
 This is not forced by the script however so it is up to the user to set their Magic Wand tool properties.
+
+---
+
+### ChangeColorOnSelected
+
+Changes color on all selected layers by prompting a ColorPicker–dialog. Works on Solid Color layers, Text layers, Normal layers and Shape layers with solid fill set.
+
+TO DO:
+* keep visibility (currently turns selected layers visible)
+* handle folder selection
 
 ---
 
