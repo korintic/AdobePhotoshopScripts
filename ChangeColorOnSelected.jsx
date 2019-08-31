@@ -1,12 +1,13 @@
 // Script to change color on all selected layers supports solid, shape, text and artlayers
 
 var doc;
+var selectedLayers = [];
 
 if (app.documents.length <= 0) {
     alert("No active document!");
 } else {
     doc = app.activeDocument;
-    doc.suspendHistory("Change color on select layers", "ChangeLayerColors();")
+    doc.suspendHistory("Change color on select layers", "ChangeLayerColors();");
 }
 
 function ChangeLayerColors() {
@@ -14,19 +15,25 @@ function ChangeLayerColors() {
     if (app.showColorPicker()) {
         var color = app.foregroundColor.rgb;
         GroupSelectedLayers();
-        var layers = doc.activeLayer.layers;
-        var layersLength = doc.activeLayer.layers.length;
+
         var grp = doc.activeLayer;
         var normalLayers = [];
+        var invisibleLayers = [];
 
-        var selectedLayers = [];
+        var layersLength = doc.activeLayer.layers.length;
+        var layers = doc.activeLayer.layers;
+        pushArtLayersToArray(grp, grp);
         for (var i = 0; i < layersLength; i++) {
-            selectedLayers.push(layers[i])
+            if (layers[i].typename != "LayerSet") {
+                selectedLayers.push(layers[i]);
+            }
         }
         undo();
-
         for (var i = 0; i < selectedLayers.length; i++) {
             app.refresh();
+            if (!selectedLayers[i].visible) {
+                invisibleLayers.push(selectedLayers[i]);
+            }
             if (selectedLayers[i].kind == LayerKind.SOLIDFILL) {
                 doc.activeLayer = selectedLayers[i];
                 SetSolidFillColor(color);
@@ -45,8 +52,23 @@ function ChangeLayerColors() {
             doc.activeLayer = normalLayers[i];
             fillWithColor(color);
         }
+        for (var i = 0; i < invisibleLayers.length; i++) {
+            doc.activeLayer = invisibleLayers[i];
+            doc.activeLayer.visible = false;
+        }
     }
 
+}
+
+function pushArtLayersToArray(targetSet, sourceSet) {
+    for (var i = 0; i < sourceSet.layers.length; i++) {
+        if (sourceSet.layers[i].typename === "LayerSet") {
+            pushArtLayersToArray(targetSet, sourceSet.layers[i]);
+        }
+    }
+    for (var i = 0; i < sourceSet.artLayers.length; i++) {
+        selectedLayers.push(sourceSet.artLayers[i]);
+    }
 }
 
 function fillWithColor(color) {
@@ -111,7 +133,7 @@ function GroupSelectedLayers() {
     var idlayerSectionEnd = stringIDToTypeID("layerSectionEnd");
     desc1.putInteger(idlayerSectionEnd, 8);
     var idNm = charIDToTypeID("Nm  ");
-    desc1.putString(idNm, """Temp""");
+    desc1.putString(idNm, "Temp");
     executeAction(idMk, desc1, DialogModes.NO);
 }
 

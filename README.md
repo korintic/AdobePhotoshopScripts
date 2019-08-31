@@ -19,7 +19,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 ![Header image](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPicker.png "Header image")
 
 
-ColorIDPicker script will toggle between currently active layer and tool an ColorID layer and Magic Wand tool making it faster to work with selections.
+ColorIDPicker script will toggle between currently active layer and tool and ColorID layer and Magic Wand tool making it faster to work with selections.
 The script is build for a workflow where there is a flat color layer that is used for making selections.
 This is a common workflow used in illustration, comicbook coloring and touch-up of 3D renders.
 Depending on who is using this workflow the selection layer has many names: Selections, Flats, ColorID, ClownPass and so on.
@@ -69,10 +69,7 @@ This is not forced by the script however so it is up to the user to set their Ma
 ### ChangeColorOnSelected
 
 Changes color on all selected layers by prompting a ColorPicker–dialog. Works on Solid Color layers, Text layers, Normal layers and Shape layers with solid fill set.
-
-TO DO:
-* keep visibility (currently turns selected layers visible)
-* handle folder selection
+If groups are selected applies color changes to all applicable layers in those groups as this is assumed intented behaviour when selecting groups.
 
 ---
 
