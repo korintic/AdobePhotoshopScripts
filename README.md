@@ -69,10 +69,7 @@ This is not forced by the script however so it is up to the user to set their Ma
 ### ChangeColorOnSelected
 
 Changes color on all selected layers by prompting a ColorPicker–dialog. Works on Solid Color layers, Text layers, Normal layers and Shape layers with solid fill set.
-
-TO DO:
-* keep visibility (currently turns selected layers visible)
-* handle folder selection
+If groups are selected applies color changes to all applicable layers in those groups as this is assumed intented behaviour when selecting groups.
 
 ---
 
