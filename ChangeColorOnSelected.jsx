@@ -7,7 +7,7 @@ if (app.documents.length <= 0) {
     alert("No active document!");
 } else {
     doc = app.activeDocument;
-    doc.suspendHistory("Change color on select layers", "ChangeLayerColors();");
+    doc.suspendHistory("Set Color On Selected", "ChangeLayerColors();");
 }
 
 function ChangeLayerColors() {
