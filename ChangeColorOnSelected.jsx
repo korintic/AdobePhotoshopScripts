@@ -1,7 +1,6 @@
 // Script to change color on all selected layers supports solid, shape, text and artlayers
 
 var doc;
-var selectedLayers = [];
 
 if (app.documents.length <= 0) {
     alert("No active document!");
@@ -14,15 +13,16 @@ function ChangeLayerColors() {
 
     if (app.showColorPicker()) {
         var color = app.foregroundColor.rgb;
-        GroupSelectedLayers();
+        groupSelectedLayers();
 
         var grp = doc.activeLayer;
         var normalLayers = [];
         var invisibleLayers = [];
+        var selectedLayers = [];
 
         var layersLength = doc.activeLayer.layers.length;
         var layers = doc.activeLayer.layers;
-        pushArtLayersToArray(grp, grp);
+        pushArtLayersToArray(grp, selectedLayers);
         for (var i = 0; i < layersLength; i++) {
             if (layers[i].typename != "LayerSet") {
                 selectedLayers.push(layers[i]);
@@ -36,7 +36,7 @@ function ChangeLayerColors() {
             }
             if (selectedLayers[i].kind == LayerKind.SOLIDFILL) {
                 doc.activeLayer = selectedLayers[i];
-                SetSolidFillColor(color);
+                setSolidFillColor(color);
             } else if (selectedLayers[i].kind == LayerKind.TEXT) {
                 var textColor = new SolidColor();
                 textColor.rgb.red = color.red;
@@ -60,14 +60,14 @@ function ChangeLayerColors() {
 
 }
 
-function pushArtLayersToArray(targetSet, sourceSet) {
+function pushArtLayersToArray(sourceSet, array) {
     for (var i = 0; i < sourceSet.layers.length; i++) {
         if (sourceSet.layers[i].typename === "LayerSet") {
-            pushArtLayersToArray(targetSet, sourceSet.layers[i]);
+            pushArtLayersToArray(sourceSet.layers[i], array);
         }
     }
     for (var i = 0; i < sourceSet.artLayers.length; i++) {
-        selectedLayers.push(sourceSet.artLayers[i]);
+        array.push(sourceSet.artLayers[i]);
     }
 }
 
@@ -85,7 +85,7 @@ function fillWithColor(color) {
 }
 
 
-function SetSolidFillColor(color) {
+function setSolidFillColor(color) {
     var color = app.foregroundColor.rgb;
     var idsetd = charIDToTypeID("setd");
     var desc1 = new ActionDescriptor();
@@ -113,7 +113,7 @@ function SetSolidFillColor(color) {
     executeAction(idsetd, desc1, DialogModes.NO);
 }
 
-function GroupSelectedLayers() {
+function groupSelectedLayers() {
     var idMk = charIDToTypeID("Mk  ");
     var desc1 = new ActionDescriptor();
     var idnull = charIDToTypeID("null");
