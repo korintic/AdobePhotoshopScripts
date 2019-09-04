@@ -10,6 +10,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 #### Scripts:
 * ColorIDPicker
 * ChangeColorOnSelected
+* UngroupNested
 * QuickExportPNG
 
 ---
@@ -70,6 +71,12 @@ This is not forced by the script however so it is up to the user to set their Ma
 
 Changes color on all selected layers by prompting a ColorPicker–dialog. Works on Solid Color layers, Text layers, Normal layers and Shape layers with solid fill set.
 If groups are selected applies color changes to all applicable layers in those groups as this is assumed intented behaviour when selecting groups.
+
+---
+
+### UngroupNested
+
+Simple script that ungroups layers in nested groups inside the selected group and deletes the empty groups.
 
 ---
 
