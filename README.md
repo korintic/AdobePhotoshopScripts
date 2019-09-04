@@ -76,7 +76,7 @@ If groups are selected applies color changes to all applicable layers in those g
 
 ### UngroupNested
 
-Simple script that ungroups layers in nested groups inside the selected group and deletes the empty groups.
+Simple script that ungroups layers from nested groups inside the selected group and deletes the empty groups.
 
 ---
 
