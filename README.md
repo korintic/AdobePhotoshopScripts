@@ -39,14 +39,14 @@ ColorID is the default layer name ColorIDPicker is looking for when starting a p
 
 The default behaviour of the script can be changed by running ColorIDPreferences.jsx from *File> Scripts> ColorIDPicker Preferences*.
 
-*Selection Layer Name* changes the layer that is used for the selections.
+**Selection Layer Name** changes the layer that is used for the selections.
 
-*Toggle selection visibility* toggles the selection edge ("marching ants").
+**Toggle selection visibility** toggles the selection edge ("marching ants").
 The selection edge visibility toggle works like ctrl+H.
 
-*Toggle layer visibility* works like alt+clicking on layer visibility icon in the Layers panel(so the previous state will be lost if layer visibility is changed manually while in pick mode).
+**Toggle layer visibility** works like alt+clicking on layer visibility icon in the Layers panel(so the previous state will be lost if layer visibility is changed manually while in pick mode).
 
-*Always select layer mask* sets ColorIDPicker to always select layer mask if current layer has one when returning from pick.
+**Always select layer mask** sets ColorIDPicker to always select layer mask if current layer has one when returning from pick.
 When this is off the script will only select layer's layer maks if the active layer is not a normal paint layer as this is usually the desired outcome when working non-destructively using solid color layer and adjustment layers with masks.
 
 #### Combinations of different preferences:
