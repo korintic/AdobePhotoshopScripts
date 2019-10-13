@@ -37,7 +37,7 @@ ColorIDPicker is meant to be used bind to a shortcut for efficiency.
 After this the script is ready to with any photoshop file that has a layer called ColorID.
 ColorID is the default layer name ColorIDPicker is looking for when starting a pick.
 
-To changes the default behaviour of the script by running ColorIDPreferences from *File> Scripts> ColorIDPicker Preferences*.
+The default behaviour of the script can be changed by running ColorIDPreferences.jsx from *File> Scripts> ColorIDPicker Preferences*.
 
 *Selection Layer Name* changes the layer that is used for the selections.
 
