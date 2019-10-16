@@ -47,7 +47,7 @@ The selection edge visibility toggle works like ctrl+H.
 **Toggle layer visibility** works like alt+clicking on layer visibility icon in the Layers panel(so the previous state will be lost if layer visibility is changed manually while in pick mode).
 
 **Always select layer mask** sets ColorIDPicker to always select layer mask if current layer has one when returning from pick.
-When this is off the script will only select layer's layer maks if the active layer is not a normal paint layer as this is usually the desired outcome when working non-destructively using solid color layer and adjustment layers with masks.
+When this is off the script will only select layer's layer mask if the active layer is not a normal paint layer as this is usually the desired outcome when working non-destructively using solid color layer and adjustment layers with masks.
 
 #### Combinations of different preferences:
 
