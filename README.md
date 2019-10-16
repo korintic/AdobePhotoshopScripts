@@ -39,6 +39,8 @@ ColorID is the default layer name ColorIDPicker is looking for when starting a p
 
 The default behaviour of the script can be changed by running ColorIDPreferences.jsx from *File> Scripts> ColorIDPicker Preferences*.
 
+![Preferences](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ColorIDPickerPreferences.png "Preferences")
+
 **Selection Layer Name** changes the layer that is used for the selections.
 
 **Toggle selection visibility** toggles the selection edge ("marching ants").
