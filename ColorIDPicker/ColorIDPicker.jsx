@@ -48,7 +48,6 @@ function pickColorID() {
     }
 
     doc = app.activeDocument;
-
     idLayer = getLayerIDByName(idLayerName);
 
     if (idLayer == undefined) {
@@ -58,8 +57,8 @@ function pickColorID() {
         captureState();
         setState();
     }
-    // If saved state found and document name matches apply saved state
     else if (savedState.getString(3) != doc.name) {
+        // If saved state found and document name matches apply saved state
         captureState();
         setState();
     } else {
@@ -74,6 +73,7 @@ function captureState() {
     desc.putInteger(1, doc.activeLayer.id);
     desc.putBoolean(2, doc.activeLayer.visible);
     desc.putString(3, doc.name);
+    
     app.putCustomOptions("ColorIDPicker", desc, true);
 }
 
@@ -82,8 +82,8 @@ function setState() {
     if (toggleLayerVisibility) {
         showOnlyLayerByID(idLayer);
     }
+    
     selectLayerByID(idLayer);
-
     if (toggleSelectionVisibility) {
         app.runMenuItem(app.stringIDToTypeID("toggleShowExtras"));
     }
@@ -94,6 +94,7 @@ function restoreState() {
     if (toggleLayerVisibility) {
         showOnlyLayerByID(idLayer);
     }
+    
     selectLayerByID(savedState.getInteger(1));
     if (!savedState.getBoolean(2) && toggleLayerVisibility) {
         hideLayerByID(savedState.getString(1));
@@ -103,12 +104,10 @@ function restoreState() {
         app.runMenuItem(app.stringIDToTypeID("toggleShowExtras"));
     }
 
-    if (
-        app.activeDocument.activeLayer.kind != LayerKind.NORMAL ||
-        alwaysSelectLayerMask
-    ) {
+    if (app.activeDocument.activeLayer.kind != LayerKind.NORMAL || alwaysSelectLayerMask) {
         selectLayerMask();
     }
+    
     app.eraseCustomOptions("ColorIDPicker");
 }
 
@@ -124,6 +123,7 @@ function showOnlyLayerByID(layerID) {
     desc.putList(idnull, list);
     var idTglO = charIDToTypeID("TglO");
     desc.putBoolean(idTglO, true);
+    
     executeAction(idShw, desc, DialogModes.NO);
 }
 
@@ -141,6 +141,7 @@ function selectLayerByID(layerID) {
     var list = new ActionList();
     list.putInteger(4);
     desc.putList(idLyrI, list);
+    
     executeAction(idslct, desc, DialogModes.NO);
 }
 
@@ -158,6 +159,7 @@ function selectLayerByName(layerName) {
     var list = new ActionList();
     list.putInteger(4);
     desc.putList(idLyrI, list);
+    
     executeAction(idslct, desc, DialogModes.NO);
 }
 
@@ -171,6 +173,7 @@ function hideLayerByID(layerID) {
     ref.putIdentifier(idLyr, layerID);
     list.putReference(ref);
     desc.putList(idnull, list);
+    
     executeAction(idHd, desc, DialogModes.NO);
 }
 
@@ -187,6 +190,7 @@ function selectLayerMask() {
         desc.putReference(idnull, ref);
         var idMkVs = charIDToTypeID("MkVs");
         desc.putBoolean(idMkVs, false);
+        
         executeAction(idslct, desc, DialogModes.NO);
     } catch (e) {}
 }
@@ -223,6 +227,7 @@ function showUI() {
     } catch (e) {
         saveSettings(toggleLayerVisibility, toggleSelectionVisibility, alwaysSelectLayerMask, idLayerName);
     }
+    
     eraseCustomOptions("cIDSettings");
     var w = new Window("dialog", "ColorIDPicker Preferences", undefined, {
         closeButton: true
@@ -252,7 +257,6 @@ function showUI() {
     }
 
     var showWin = w.show();
-
 }
 
 function saveSettings(layerVis, selectionVis, selectMask, layerName) {
