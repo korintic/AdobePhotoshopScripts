@@ -21,7 +21,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 
 
 ColorIDPicker script will toggle between currently active layer and tool and ColorID layer and Magic Wand tool making it faster to work with selections.
-The script is build for a workflow where a flat color layer is used for making selections.
+The script is built for a workflow where a flat color layer is used for making selections.
 This is a common workflow used in illustration, comicbook coloring and touch-up of 3D renders.
 Depending on who is using this workflow the selection layer has many names: Selections, Flats, ColorID, ClownPass and so on.
 By default this script uses the layer name ColorID.
