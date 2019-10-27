@@ -11,6 +11,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 * ColorIDPicker
 * ChangeColorOnSelected
 * UngroupNested
+* SetTextLayerContent
 * QuickExportPNG
 
 ---
@@ -74,6 +75,12 @@ If groups are selected applies color changes to all applicable layers in those g
 ### UngroupNested
 
 Simple script that ungroups layers from nested groups inside the selected group and deletes the empty groups.
+
+---
+
+### SetTextLayerContent
+
+This script updates contents of text layers in the active document based on the contents of the selected JSON file. The script prompts an open dialog for the user to select a JSON file. Then it matches the keys from the JSON object to text layer names and updates those layers contents with the corresponding value pairs.
 
 ---
 
