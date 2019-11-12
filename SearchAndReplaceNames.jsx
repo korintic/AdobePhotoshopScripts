@@ -25,9 +25,9 @@ var blendModeDropdown;
 var checkOpacity = false;
 var checkFillOpacity = false;
 var minOpacity = 0;
-var maxOpacity = 0;
+var maxOpacity = 100;
 var minFillOpacity = 0;
-var maxFillOpacity = 0;
+var maxFillOpacity = 100;
 
 String.prototype.endsWith = function (str) {
 
