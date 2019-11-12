@@ -9,6 +9,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 
 #### Scripts:
 * ColorIDPicker
+* SearchAndReplaceNames
 * ChangeColorOnSelected
 * UngroupNested
 * SetTextLayerContent
@@ -62,6 +63,14 @@ When this is off the script will only select layer's layer mask if the active la
 Usually in this workflow the flat color layer has hard edges without anti-aliasing for precise selections. 
 For correct results the Magic Wand tool settings should be set so that anti-aliasing is off and tolerance is set to zero.
 This is not forced by the script however so it is up to the user to set their Magic Wand tool properties.
+
+---
+
+### SearchAndReplaceNames
+
+This script provides a simple UI dialog for manipulating layer names. Includes advanced options for searching by blend mode, layer type, opacity or fill amounts.
+
+![SearchAndReplaceNames](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/SearchAndReplaceNames.png "SearchAndReplaceNames")
 
 ---
 
