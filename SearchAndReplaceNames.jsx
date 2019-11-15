@@ -23,6 +23,7 @@ var ignoreCase = false;
 var useRegEx = false;
 
 var searchInputField = "";
+var replaceWith = "";
 var layerTypeDropdown;
 var blendModeDropdown;
 
@@ -165,6 +166,7 @@ function showUI() {
         contains = containsToggle.value;
         begingsWith = begingsWithToggle.value;
         endsWith = endsWithToggle.value;
+        replaceWith = replaceWithField.text;
 
         replace = replaceToggle.value;
         replaceWhole = replaceWholeToggle.value;
@@ -347,6 +349,7 @@ function traverseLayers(layers) {
 function returnMatchingLayers(array, layer, search) {
 
     var layerName = layer.name;
+    var escapedSearch = escapeRegExp(search);
     if (ignoreCase) {
         search = search.toLowerCase();
         layerName = layerName.toLowerCase();
@@ -362,7 +365,7 @@ function returnMatchingLayers(array, layer, search) {
                 if (layerName.match(regExSearch)) {
                     array.push(layer);
                 }
-            } else if (layerName.match(search)) {
+            } else if (layerName.match(escapedSearch)) {
                 array.push(layer);
             }
         }
@@ -431,17 +434,15 @@ function updateNames(layer, layerName, newLayerName) {
         var array = [];
         var flag = "g";
         var regExString;
-        if (ignoreCase) {
+        var replacestr = newLayerName;
+        var newstr = "";
+        if (ignoreCase && !useRegEx) {
             flag = "ig";
             regExString = new RegExp(searchInputField.text, flag);
             str = str.replace(regExString, searchInputField.text.toLowerCase());
             array = str.split(searchInputField.text.toLowerCase());
-        } else {
-            array = str.split(searchInputField.text);
         }
-        var replacestr = newLayerName;
-        var newstr = "";
-        if (useRegEx) {
+        else if ((ignoreCase && useRegEx) || useRegEx) {
             flag = "g";
             if (ignoreCase) {
                 flag = "ig";
@@ -449,6 +450,7 @@ function updateNames(layer, layerName, newLayerName) {
             regExString = new RegExp(searchInputField.text, flag);
             newstr = str.replace(regExString, newLayerName);
         } else {
+            array = str.split(searchInputField.text);
             for (var i = 0; i < array.length; i++) {
                 if (array.length - 1 !== i) {
                     newstr = newstr.concat(array[i], replacestr);
@@ -460,7 +462,9 @@ function updateNames(layer, layerName, newLayerName) {
         layer.name = newstr;
 
     } else if (replaceWhole) {
-        layer.name = newLayerName;
+        if(replaceWith !== "") {
+            layer.name = newLayerName;
+        }
     }
 
     if (addPrefix) {
@@ -529,4 +533,8 @@ function selectLayerByID(layerID) {
     var idMkVs = charIDToTypeID("MkVs");
     desc.putBoolean(idMkVs, false);
     executeAction(idslct, desc, DialogModes.NO)
+}
+
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
