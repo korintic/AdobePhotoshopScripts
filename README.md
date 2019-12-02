@@ -9,7 +9,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 
 #### Scripts:
 * ColorIDPicker
-* SearchAndReplaceNames
+* AdvancedLayerRenamer
 * ChangeColorOnSelected
 * UngroupNested
 * SetTextLayerContent
@@ -66,11 +66,13 @@ This is not forced by the script however so it is up to the user to set their Ma
 
 ---
 
-### SearchAndReplaceNames
+### AdvancedLayerRenamer
 
-This script provides a simple UI dialog for manipulating layer names. Includes advanced options for searching by blend mode, layer type, opacity or fill amounts.
+This script provides a UI dialog for manipulating layer names and selecting layers. Includes advanced options for searching by blend mode, layer type, opacity or fill amounts.
 
 ![SearchAndReplaceNames](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/SearchAndReplaceNames.png "SearchAndReplaceNames")
+
+Note: Use regex works only partly. The functionality needs to be reconsidered and brought in.
 
 ---
 
