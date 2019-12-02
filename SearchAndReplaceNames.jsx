@@ -1,13 +1,15 @@
 /*
 <javascriptresource>
-<name>Search And Replace Layer Names</name>
-<category>Utils</category>
+<name>Advanced Layer Renamer</name>
+<category>AvancedUtils</category>
 </javascriptresource>
 */
 
 var doc;
 var matchingLayers = [];
+var layersToUpdate = [];
 var layerIDs = [];
+var selected = [];
 
 var matches = false;
 var contains = true;
@@ -21,9 +23,19 @@ var addSuffix = false;
 var selectMatching = false;
 var ignoreCase = false;
 var useRegEx = false;
+var global = true;
 
-var searchInputField = "";
+var updateMatching = true;
+var updateSelected = false;
+
+var selectWhenRenaming = false;
+var newSelection = true;
+var addToSelection = false;
+var removeFromSelection = false;
+
+var searchInput = "";
 var replaceWith = "";
+var flag = "g";
 var layerTypeDropdown;
 var blendModeDropdown;
 
@@ -74,10 +86,9 @@ var layerBlendModes = {
 var layerTypes = {
     "Normal": LayerKind.NORMAL,
     "Text": LayerKind.TEXT,
-    "Group/Frame": "LayerSet",
     "SmartObject": LayerKind.SMARTOBJECT,
-    "Solid Fill": LayerKind.SOLIDFILL,
-    "Gradient Fill": LayerKind.GRADIENTFILL,
+    "Solid": LayerKind.SOLIDFILL,
+    "Gradient": LayerKind.GRADIENTFILL,
     "Pattern": LayerKind.PATTERNFILL,
     "Brightness/Contrast": LayerKind.BRIGHTNESSCONTRAST,
     "Levels": LayerKind.LEVELS,
@@ -115,35 +126,43 @@ if (app.documents.length <= 0) {
     alert("No active document");
 } else {
     doc = app.activeDocument;
-    doc.suspendHistory("Search And Replace Names", "main();");
+    doc.suspendHistory("Advanced Layer Renamer", "main();");
 }
 
 function main() {
+    selected = GetSelectedLayersIDs();
+    for(var i = 0; i < selected.length; i++) {
+        layerIDs.push(getLayerIDByIndex(selected[i]));
+    }
+    if(layerIDs.length !== 0) {
+        deselectAllLayers();
+        selectLayersByID(layerIDs);
+    }
     showUI();
 }
 
 function showUI() {
 
-    var w = new Window("dialog", "Search And Replace Layer Names", undefined, {closeButton: true});
+    var w = new Window("dialog", "Advanced Layer Renamer", undefined, {closeButton: true});
     w.alignChildren = "fill";
 
     var searchResults = "";
     var inputGrp = w.add("group");
-    inputGrp.add("statictext", undefined, "Search for:");
-    searchInputField = inputGrp.add("edittext", undefined, searchResults);
+    inputGrp.add("statictext", undefined, "Search For:");
+    var searchInputField = inputGrp.add("edittext", undefined, searchResults);
     searchInputField.characters = 30;
 
 
     var panelGrp = w.add("panel", undefined, undefined);
     panelGrp.orientation = "row";
-    var containsToggle = panelGrp.add("radiobutton", undefined, "contains");
-    var matchesToggle = panelGrp.add("radiobutton", undefined, "matches");
-    var begingsWithToggle = panelGrp.add("radiobutton", undefined, "begins with");
-    var endsWithToggle = panelGrp.add("radiobutton", undefined, "ends with");
+    var containsToggle = panelGrp.add("radiobutton", undefined, "Contains");
+    var matchesToggle = panelGrp.add("radiobutton", undefined, "Matches");
+    var begingsWithToggle = panelGrp.add("radiobutton", undefined, "Begins With");
+    var endsWithToggle = panelGrp.add("radiobutton", undefined, "Ends With");
     containsToggle.value = true;
 
     var replaceGrp = w.add("group");
-    replaceGrp.add("statictext", undefined, "New name:");
+    replaceGrp.add("statictext", undefined, "New Name:");
     var replaceWithField = replaceGrp.add("edittext", undefined, "");
     replaceWithField.characters = 30;
 
@@ -151,22 +170,22 @@ function showUI() {
     toggleGrp.orientation = "row";
     toggleGrp.alignChildren = "fill";
 
-    var replaceToggle = toggleGrp.add("radiobutton", undefined, "replace");
-    var replaceWholeToggle = toggleGrp.add("radiobutton", undefined, "replace whole");
-    var addPrefixToggle = toggleGrp.add("radiobutton", undefined, "add prefix");
-    var addSuffixToggle = toggleGrp.add("radiobutton", undefined, "add suffix");
+    var replaceToggle = toggleGrp.add("radiobutton", undefined, "Replace");
+    var replaceWholeToggle = toggleGrp.add("radiobutton", undefined, "Replace Whole");
+    var addPrefixToggle = toggleGrp.add("radiobutton", undefined, "Add Prefix");
+    var addSuffixToggle = toggleGrp.add("radiobutton", undefined, "Add Suffix");
     replaceToggle.value = true;
 
     var buttonGrp = w.add('group {alignment: "center"}');
     var updateLayerNamesBtn = buttonGrp.add('button', undefined, 'Update Layer Names');
     updateLayerNamesBtn.preferredSize = {width: 160,height: 40};
     updateLayerNamesBtn.onClick = function () {
-        layerIDs = [];
         matches = matchesToggle.value;
         contains = containsToggle.value;
         begingsWith = begingsWithToggle.value;
         endsWith = endsWithToggle.value;
         replaceWith = replaceWithField.text;
+        searchInput = searchInputField.text;
 
         replace = replaceToggle.value;
         replaceWhole = replaceWholeToggle.value;
@@ -177,16 +196,27 @@ function showUI() {
         selectMatching = selectMatchingCheckBox.value;
         ignoreCase = ignoreCaseCheckBox.value;
         useRegEx = useRegExCheckBox.value;
+        global = globalCheckBox.value;
+        updateSelected = updateSelectedToggle.value;
+        updateMatching = updateMatchingToggle.value;
         matchingLayers = [];
-        traverseLayers(doc.layers)
+        layersToUpdate = [];
         var isInvalid = false;
-        for (var i = 0; i < matchingLayers.length; i++) {
-            var tempVis = matchingLayers[i].visible;
-            if (!matchingLayers[i].isBackgroundLayer) {
+
+        if(updateMatching) {
+            layerIDs = [];
+            returnMatchingLayers(doc.layers)
+            layersToUpdate = matchingLayers;
+        }
+        else {
+            returnLayersToUpdate(doc.layers);
+        }
+        for (var i = 0; i < layersToUpdate.length; i++) {
+            var tempVis = layersToUpdate[i].visible;
+            if (!layersToUpdate[i].isBackgroundLayer) {
                 if (searchInputField.text == "" && replaceToggle.value) {
                     isInvalid = true;
-                    if (selectMatching) {
-                        doc.activeLayer = matchingLayers[i];
+                    if (updateMatching) {
                         layerIDs.push(getLayerID());
                     }
                 } else {
@@ -194,9 +224,9 @@ function showUI() {
                     var text = replaceWithField.text;
                     if (text.match("%NN")) {
                         if (searchInputField.text == "") {
-                            indice = matchingLayers.length - i - 1;
+                            indice = layersToUpdate.length - i - 1;
                         } else {
-                            indice = matchingLayers.length - i;
+                            indice = layersToUpdate.length - i;
                         }
                         if (indice < 10) {
                             indice = "0" + indice.toString();
@@ -211,14 +241,13 @@ function showUI() {
                         }
                         text = text.replace(/%nn/g, indice);
                     }
-                    updateNames(matchingLayers[i], matchingLayers[i].name, text)
-                    if (selectMatching) {
-                        doc.activeLayer = matchingLayers[i];
+                    updateNames(layersToUpdate[i], text)
+                    if (updateMatching) {
                         layerIDs.push(getLayerID());
                     }
                 }
             }
-            matchingLayers[i].visible = tempVis;
+            layersToUpdate[i].visible = tempVis;
         }
         if (isInvalid) {
             alert("Replace option not available with empty search.\nTry 'replace whole', 'add prefix' or 'add suffix' options instead.");
@@ -227,7 +256,16 @@ function showUI() {
             deselectAllLayers();
             selectLayersByID(layerIDs);
         }
+        else if (layerIDs.length) {
+            selectLayersByID(layerIDs);
+        }
     }
+
+    var UpdateOptionsGrp = w.add('group {alignment: "center"}');
+    UpdateOptionsGrp.orientation = "row";
+    var updateMatchingToggle = UpdateOptionsGrp.add("radiobutton", undefined, "Matching");
+    updateMatchingToggle.value = true;
+    var updateSelectedToggle = UpdateOptionsGrp.add("radiobutton", undefined, "Selected");
 
     var advancedSettingsGrp = w.add("panel", undefined, "Advanced Settings:");
     advancedSettingsGrp.orientation = "column";
@@ -260,8 +298,8 @@ function showUI() {
     var checkboxGrp = advancedSettingsGrp.add("group", undefined, undefined);
     checkboxGrp.orientation = "row";
     checkboxGrp.alignChildren = "left";
-    var opacityCheckBox = checkboxGrp.add("checkbox", undefined, "Limit by Opacity");
-    var fillOpacityCheckBox = checkboxGrp.add("checkbox", undefined, "Limit by Fill");
+    var opacityCheckBox = checkboxGrp.add("checkbox", undefined, "Limit By Opacity");
+    var fillOpacityCheckBox = checkboxGrp.add("checkbox", undefined, "Limit By Fill");
 
     var opacityGrp = advancedSettingsGrp.add("group", undefined, undefined);
     opacityGrp.orientation = "row";
@@ -326,58 +364,161 @@ function showUI() {
     var regGrp = advancedSettingsGrp.add("group", undefined, undefined);
     regGrp.orientation = "row";
     regGrp.align = "fill";
-    var selectMatchingCheckBox = regGrp.add("checkbox", undefined, "Select Matching Layers");
-    var ignoreCaseCheckBox = regGrp.add("checkbox", undefined, "Ignore case");
+    var ignoreCaseCheckBox = regGrp.add("checkbox", undefined, "Ignore Case");
     var useRegExCheckBox = regGrp.add("checkbox", undefined, "Use RegEx");
+    var globalCheckBox = regGrp.add("checkbox", undefined, "Global");
+    globalCheckBox.value = true;
     searchInputField.active = true;
+
+    var selectionSettingsGrp = w.add("panel", undefined, "Selection Settings:");
+    selectionSettingsGrp.orientation = "column";
+    selectionSettingsGrp.alignChildren = "left";
+
+    var selectionGrp1 = selectionSettingsGrp.add("group", undefined, undefined);
+    selectionGrp1.orientation = "row";
+    selectionGrp1.align = "fill";
+
+    var selectMatchingBtn = selectionGrp1.add('button', undefined, 'Select Matching');
+    selectMatchingBtn.onClick = function () {
+        matches = matchesToggle.value;
+        contains = containsToggle.value;
+        begingsWith = begingsWithToggle.value;
+        endsWith = endsWithToggle.value;
+        replaceWith = replaceWithField.text;
+        searchInput = searchInputField.text;
+
+        replace = replaceToggle.value;
+        replaceWhole = replaceWholeToggle.value;
+        addPrefix = addPrefixToggle.value;
+        addSuffix = addSuffixToggle.value;
+        checkOpacity = opacityCheckBox.value;
+        checkFillOpacity = fillOpacityCheckBox.value;
+        selectMatching = selectMatchingCheckBox.value;
+        ignoreCase = ignoreCaseCheckBox.value;
+        useRegEx = useRegExCheckBox.value;
+        global = globalCheckBox.value;
+        newSelection = newSelectioToggle.value;
+        removeFromSelection = removeFromSelectionToggle.value;
+        matchingLayers = [];
+        var layerIDsToRemove = [];
+        var layerIDsToSelect = [];
+        if(newSelection) {
+            layerIDs = [];
+        }
+        returnMatchingLayers(doc.layers);
+
+        for (var i = 0; i < matchingLayers.length; i++) {
+            doc.activeLayer = matchingLayers[i];
+            if(removeFromSelection) {
+                layerIDsToRemove.push(getLayerID());    
+            }
+            else {
+                layerIDs.push(getLayerID());
+            }
+        }
+
+        if(removeFromSelection) {
+            layerIDsToSelect = []
+            var keep = true;
+            for(var i = 0; i < layerIDs.length; i++) {
+                for(var j = 0; j < layerIDsToRemove.length; j++) {
+                    if(layerIDs[i] === layerIDsToRemove[j]) {
+                        keep = false;
+                    }
+                }
+                if(keep) {
+                    layerIDsToSelect.push(layerIDs[i])
+                }
+                keep = true;
+            }
+            layerIDs = layerIDsToSelect;
+        }
+        if(layerIDs.length !== 0) {
+            deselectAllLayers();
+            selectLayersByID(layerIDs);
+        }
+    }
+
+    var selectMatchingCheckBox = selectionGrp1.add("checkbox", undefined, "Select When Renaming");
+    var selectionGrp = selectionSettingsGrp.add("group", undefined, undefined);
+    selectionGrp.orientation = "row";
+    selectionGrp.align = "fill";
+    var newSelectioToggle = selectionGrp.add("radiobutton", undefined, "New Selection");
+    newSelectioToggle.value =  true;
+    var addToSelectionToggle = selectionGrp.add("radiobutton", undefined, "Add To Selection");
+    var removeFromSelectionToggle = selectionGrp.add("radiobutton", undefined, "Remove From Selection");
 
     var showWin = w.show();
 }
 
-function traverseLayers(layers) {
+function returnMatchingLayers(layers) {
 
     for (var i = 0; i < layers.length; i++) {
         if (layers[i].typename === "LayerSet") {
-            traverseLayers(layers[i].layers);
-            returnMatchingLayers(matchingLayers, layers[i], searchInputField.text);
+            returnMatchingLayers(layers[i].layers);
+            matchLayers(matchingLayers, layers[i], searchInput);
         } else {
-            returnMatchingLayers(matchingLayers, layers[i], searchInputField.text);
+            matchLayers(matchingLayers, layers[i], searchInput);
         }
     }
 }
 
-function returnMatchingLayers(array, layer, search) {
+function matchLayers(array, layer, search) {
 
     var layerName = layer.name;
     var escapedSearch = escapeRegExp(search);
     if (ignoreCase) {
-        search = search.toLowerCase();
+        escapedSearch = escapedSearch.toLowerCase();
         layerName = layerName.toLowerCase();
     }
     if (matchAdvancedOptions(layer)) {
         if (matches) {
             if (layerName === search || search === "") {
                 array.push(layer);
+                return
             }
         } else if (contains) {
             if (useRegEx) {
-                var regExSearch = new RegExp(search, 'g')
+                var regExSearch = new RegExp(search, "g")
                 if (layerName.match(regExSearch)) {
                     array.push(layer);
+                    return
                 }
             } else if (layerName.match(escapedSearch)) {
                 array.push(layer);
+                return
             }
         }
 
         if (begingsWith) {
             if (layerName.startsWith(search)) {
                 array.push(layer);
+                return
             }
         } else if (endsWith) {
             if (layerName.endsWith(search)) {
                 array.push(layer);
+                return
             }
+        }
+    }
+}
+
+function returnLayersToUpdate(layers) {
+    for (var i = 0; i < layers.length; i++) {
+        if (layers[i].typename === "LayerSet") {
+            returnLayersToUpdate(layers[i].layers);
+            matchID(layers[i]);
+        } else {
+            matchID(layers[i]);
+        }
+    }
+}
+
+function matchID(layer) {
+    for(var i = 0; i < layerIDs.length; i++ ) {
+        if (layer.id === layerIDs[i]) {
+            layersToUpdate.push(layer);
         }
     }
 }
@@ -399,21 +540,35 @@ function matchAdvancedOptions(layer) {
             return false;
         }
     }
-    if (layer.kind !== layerTypes[layerTypeDropdown.selection.text]) {
-        if (layerTypeDropdown.selection.text !== "Any") {
-            if (layerTypeDropdown.selection.text === "Any Non-Fill Adjustement Layer") {
-                for (var i = 0; i < adjustmentLayers.length; i++) {
-                    if (layer.kind == adjustmentLayers[i]) {
-                        return true;
-                    }
-                }
-                return false;
-            } else {
-                return false;
-            }
+    if ( layer.kind === layerTypes[layerTypeDropdown.selection.text])
+    {
+        if (!(layer instanceof LayerSet)) {
+            return true;
         }
     }
-    return true;
+    if(layerTypeDropdown.selection.text === "Group/Frame")
+    {
+        if (layer instanceof LayerSet) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    if (layerTypeDropdown.selection.text === "Any") {
+
+        return true;
+
+    }
+    if (layerTypeDropdown.selection.text === "Any Non-Fill Adjustement Layer") {
+        for (var i = 0; i < adjustmentLayers.length; i++) {
+            if (layer.kind === adjustmentLayers[i]) {
+                return  true;
+            }
+        }
+        return false;
+    }
+    return false;
 }
 
 function matchOpacity(opacity, min, max) {
@@ -425,39 +580,48 @@ function matchOpacity(opacity, min, max) {
     }
 }
 
-function updateNames(layer, layerName, newLayerName) {
+function updateNames(layer, newLayerName) {
 
     var layerName = layer.name;
-
     if (replace) {
         var str = layerName;
         var array = [];
-        var flag = "g";
         var regExString;
         var replacestr = newLayerName;
         var newstr = "";
-        if (ignoreCase && !useRegEx) {
-            flag = "ig";
-            regExString = new RegExp(searchInputField.text, flag);
-            str = str.replace(regExString, searchInputField.text.toLowerCase());
-            array = str.split(searchInputField.text.toLowerCase());
-        }
-        else if ((ignoreCase && useRegEx) || useRegEx) {
-            flag = "g";
-            if (ignoreCase) {
+        if (ignoreCase && !useRegEx) { 
+            var escapedSearchInput = escapeRegExp(searchInput);
+            if(global) {
                 flag = "ig";
             }
-            regExString = new RegExp(searchInputField.text, flag);
-            newstr = str.replace(regExString, newLayerName);
-        } else {
-            array = str.split(searchInputField.text);
-            for (var i = 0; i < array.length; i++) {
-                if (array.length - 1 !== i) {
-                    newstr = newstr.concat(array[i], replacestr);
-                } else {
-                    newstr = newstr.concat(array[i])
-                }
+            else {
+                flag = "i";
             }
+            regExString = new RegExp(escapedSearchInput, flag);
+            newstr = layerName.replace(regExString, newLayerName);
+        }
+        else if((ignoreCase && useRegEx) || useRegEx) {
+            if(global) {
+                flag = "ig";
+            }
+            else if (ignoreCase) {
+                flag = "i";
+            }
+            else {
+                flag = "";
+            }
+            regExString = new RegExp(searchInput, flag);
+            newstr = layerName.replace(regExString, newLayerName);
+        } else {
+            var escapedSearchInput = escapeRegExp(searchInput);
+            if(global) {
+                flag = "g";
+            }
+            else {
+                flag = "";
+            }
+            regExString = new RegExp(escapedSearchInput, flag);
+            newstr = layerName.replace(regExString, newLayerName);
         }
         layer.name = newstr;
 
@@ -492,6 +656,13 @@ function getLayerID() {
     ref.putEnumerated(charIDToTypeID('Lyr '), charIDToTypeID('Ordn'), charIDToTypeID('Trgt'));
     return executeActionGet(ref).getInteger(stringIDToTypeID("layerID"));
 };
+
+function getLayerIDByIndex(idx) {   
+    var ref = new ActionReference();   
+    ref.putProperty( charIDToTypeID("Prpr") , stringIDToTypeID( "layerID"));   
+    ref.putIndex( charIDToTypeID( "Lyr " ), idx );  
+    return executeActionGet(ref).getInteger(stringIDToTypeID( "layerID"));;   
+};  
 
 function selectLayersByID(array) {
     var idslct = charIDToTypeID("slct");
@@ -533,6 +704,32 @@ function selectLayerByID(layerID) {
     var idMkVs = charIDToTypeID("MkVs");
     desc.putBoolean(idMkVs, false);
     executeAction(idslct, desc, DialogModes.NO)
+}
+
+function GetSelectedLayersIDs()
+{
+    var selectedLayers = new Array;
+    var ref = new ActionReference();
+    ref.putEnumerated(charIDToTypeID('Dcmn'), charIDToTypeID('Ordn'), charIDToTypeID('Trgt') );
+    var desc = executeActionGet(ref);
+    if (desc.hasKey(stringIDToTypeID('targetLayers')))
+    {
+        desc = desc.getList(stringIDToTypeID('targetLayers'));
+        var c = desc.count 
+        var selectedLayers = new Array();
+        for(var i = 0; i < c; ++i)
+        {
+            selectedLayers.push(desc.getReference(i).getIndex());
+        }
+    }
+    else
+    {
+        var ref = new ActionReference(); 
+        ref.putProperty(charIDToTypeID('Prpr'), charIDToTypeID('ItmI')); 
+        ref.putEnumerated(charIDToTypeID('Lyr '), charIDToTypeID('Ordn'), charIDToTypeID('Trgt'));
+        selectedLayers.push(executeActionGet(ref).getInteger(charIDToTypeID('ItmI')));
+    }
+    return selectedLayers;
 }
 
 function escapeRegExp(string) {
