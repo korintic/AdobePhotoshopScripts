@@ -70,7 +70,7 @@ This is not forced by the script however so it is up to the user to set their Ma
 
 This script provides a UI dialog for manipulating layer names and selecting layers. Includes advanced options for searching by blend mode, layer type, opacity or fill amounts.
 
-![SearchAndReplaceNames](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/SearchAndReplaceNames.png "SearchAndReplaceNames")
+![AdvancedLayerRenamer](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/AdvancedLayerRenamer.png "AdvancedLayerRenamer")
 
 Note: Use regex works only partly. The functionality needs to be reconsidered and brought in.
 
