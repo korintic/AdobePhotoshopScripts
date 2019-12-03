@@ -187,8 +187,12 @@ function showUI() {
     updateLayerNamesBtn.onClick = function () {
         matchingLayers = [];
         layersToUpdate = [];
+        var selectedIDs = [];
         var isInvalid = false;
-
+        if(!selectMatchingCheckBox.value) {
+            selected = getSelectedLayersIndices();
+            selectedIDs = getSelectedLayersID(selected);
+        }
         if(updateMatchingToggle.value) {
             layerIDs = [];
             returnMatchingLayers(doc.layers)
@@ -202,7 +206,7 @@ function showUI() {
             if (!layersToUpdate[i].isBackgroundLayer) {
                 if (searchInputField.text == "" && replaceToggle.value) {
                     isInvalid = true;
-                    if (updateMatchingToggle.value) {
+                    if (selectMatchingCheckBox.value) {
                         doc.activeLayer = layersToUpdate[i];
                         layerIDs.push(getLayerID());
                     }
@@ -229,7 +233,7 @@ function showUI() {
                         text = text.replace(/%nn/g, indice);
                     }
                     updateNames(layersToUpdate[i], text)
-                    if (updateMatchingToggle.value) {
+                    if (selectMatchingCheckBox.value) {
                         doc.activeLayer = layersToUpdate[i];
                         layerIDs.push(getLayerID());
                     }
@@ -241,13 +245,28 @@ function showUI() {
             alert("Replace option not available with empty search.\nTry 'replace whole', 'add prefix' or 'add suffix' options instead.");
         }
         if (layerIDs.length !== 0 && selectMatchingCheckBox.value) {
-            if(layerIDs.length > 1) {
-                deselectAllLayers();
+            if(layerIDs.length === 1) {
+                selectLayerByID(layerIDs[0]);
+                if(!doc.activeLayer.isBackgroundLayer) {
+                    deselectAllLayers();
+                }
+            }
+            else {
+                deselectAllLayers();    
             }
             selectLayersByID(layerIDs);
         }
-        else if (layerIDs.length !== 0) {
-            selectLayersByID(layerIDs);
+        if (selectedIDs.length !== 0 && !selectMatchingCheckBox.value) {
+            if(selectedIDs.length === 1) {
+                selectLayerByID(selectedIDs[0]);
+                if(!doc.activeLayer.isBackgroundLayer) {
+                    deselectAllLayers();
+                }
+            }
+            else {
+                deselectAllLayers();    
+            }
+            selectLayersByID(selectedIDs);
         }
     }
 
