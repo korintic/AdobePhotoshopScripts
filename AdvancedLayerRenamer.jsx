@@ -134,7 +134,7 @@ if (app.documents.length <= 0) {
     alert("No active document");
 } else {
     doc = app.activeDocument;
-    doc.suspendHistory("Advanced Layer Renamer", "main();");
+    doc.suspendHistory("Rename Layers", "main();");
 }
 
 function main() {
