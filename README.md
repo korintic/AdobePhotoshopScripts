@@ -72,7 +72,6 @@ This script provides a UI dialog for manipulating layer names and selecting laye
 
 ![AdvancedLayerRenamer](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/AdvancedLayerRenamer.png "AdvancedLayerRenamer")
 
-Note: Use regex works only partly. The functionality needs to be reconsidered and brought in.
 
 ---
 
