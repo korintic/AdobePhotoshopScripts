@@ -1,5 +1,4 @@
 // Script to change color on all selected layers supports solid, shape, text and artlayers
-
 var doc;
 
 if (app.documents.length <= 0) {
@@ -10,42 +9,27 @@ if (app.documents.length <= 0) {
 }
 
 function ChangeLayerColors() {
-
     if (app.showColorPicker()) {
         var color = app.foregroundColor.rgb;
-        groupSelectedLayers();
-
-        var grp = doc.activeLayer;
+        var selectedLayers = getSelectedLayersIndex();
         var normalLayers = [];
         var invisibleLayers = [];
-        var selectedLayers = [];
 
-        var layersLength = doc.activeLayer.layers.length;
-        var layers = doc.activeLayer.layers;
-        pushArtLayersToArray(grp, selectedLayers);
-        for (var i = 0; i < layersLength; i++) {
-            if (layers[i].typename != "LayerSet") {
-                selectedLayers.push(layers[i]);
-            }
-        }
-        undo();
         for (var i = 0; i < selectedLayers.length; i++) {
-            app.refresh();
-            if (!selectedLayers[i].visible) {
-                invisibleLayers.push(selectedLayers[i]);
+            selectLayerByIndex( selectedLayers[i], false)
+            if (!doc.activeLayer.visible) {
+                invisibleLayers.push(doc.activeLayer);
             }
-            if (selectedLayers[i].kind == LayerKind.SOLIDFILL) {
-                doc.activeLayer = selectedLayers[i];
+            if (doc.activeLayer.kind == LayerKind.SOLIDFILL) {
                 setSolidFillColor(color);
-            } else if (selectedLayers[i].kind == LayerKind.TEXT) {
+            } else if (doc.activeLayer.kind == LayerKind.TEXT) {
                 var textColor = new SolidColor();
                 textColor.rgb.red = color.red;
                 textColor.rgb.green = color.green;
                 textColor.rgb.blue = color.blue;
-                doc.activeLayer = selectedLayers[i];
                 doc.activeLayer.textItem.color = textColor;
-            } else if (selectedLayers[i].kind == LayerKind.NORMAL) {
-                normalLayers.push(selectedLayers[i]);
+            } else if (doc.activeLayer.kind == LayerKind.NORMAL) {
+                normalLayers.push(doc.activeLayer);
             }
         }
         for (var i = 0; i < normalLayers.length; i++) {
@@ -57,17 +41,8 @@ function ChangeLayerColors() {
             doc.activeLayer.visible = false;
         }
     }
-
-}
-
-function pushArtLayersToArray(sourceSet, array) {
-    for (var i = 0; i < sourceSet.layers.length; i++) {
-        if (sourceSet.layers[i].typename === "LayerSet") {
-            pushArtLayersToArray(sourceSet.layers[i], array);
-        }
-    }
-    for (var i = 0; i < sourceSet.artLayers.length; i++) {
-        array.push(sourceSet.artLayers[i]);
+    for (var i = 0; i < selectedLayers.length; i++) {
+        selectLayerByIndex(selectedLayers[i], true);
     }
 }
 
@@ -83,7 +58,6 @@ function fillWithColor(color) {
         doc.selection.deselect();
     }
 }
-
 
 function setSolidFillColor(color) {
     var color = app.foregroundColor.rgb;
@@ -113,30 +87,47 @@ function setSolidFillColor(color) {
     executeAction(idsetd, desc1, DialogModes.NO);
 }
 
-function groupSelectedLayers() {
-    var idMk = charIDToTypeID("Mk  ");
-    var desc1 = new ActionDescriptor();
-    var idnull = charIDToTypeID("null");
+function getSelectedLayersIndex(){
+    var selectedLayers = new Array;
     var ref = new ActionReference();
-    var idlayerSection = stringIDToTypeID("layerSection");
-    ref.putClass(idlayerSection);
-    desc1.putReference(idnull, ref);
-    var idFrom = charIDToTypeID("From");
-    var ref2 = new ActionReference();
-    var idLyr = charIDToTypeID("Lyr ");
-    var idOrdn = charIDToTypeID("Ordn");
-    var idTrgt = charIDToTypeID("Trgt");
-    ref2.putEnumerated(idLyr, idOrdn, idTrgt);
-    desc1.putReference(idFrom, ref2);
-    var idlayerSectionStart = stringIDToTypeID("layerSectionStart");
-    desc1.putInteger(idlayerSectionStart, 7);
-    var idlayerSectionEnd = stringIDToTypeID("layerSectionEnd");
-    desc1.putInteger(idlayerSectionEnd, 8);
-    var idNm = charIDToTypeID("Nm  ");
-    desc1.putString(idNm, "Temp");
-    executeAction(idMk, desc1, DialogModes.NO);
-}
+    ref.putEnumerated( charIDToTypeID("Dcmn"), charIDToTypeID("Ordn"), charIDToTypeID("Trgt") );
+    var desc = executeActionGet(ref);
+    if( desc.hasKey( stringIDToTypeID( 'targetLayers' ) ) ){
+       desc = desc.getList( stringIDToTypeID( 'targetLayers' ));
+        var c = desc.count 
+        var selectedLayers = new Array();
+        for(var i=0;i<c;i++){
+          try{ 
+             activeDocument.backgroundLayer;
+             selectedLayers.push(  desc.getReference( i ).getIndex() );
+          }catch(e){
+             selectedLayers.push(  desc.getReference( i ).getIndex()+1 );
+          }
+        }
+     }else{
+       var ref = new ActionReference(); 
+       ref.putProperty( charIDToTypeID("Prpr") , charIDToTypeID( "ItmI" )); 
+       ref.putEnumerated( charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt") );
+       try{ 
+          activeDocument.backgroundLayer;
+          selectedLayers.push( executeActionGet(ref).getInteger(charIDToTypeID( "ItmI" ))-1);
+       }catch(e){
+          selectedLayers.push( executeActionGet(ref).getInteger(charIDToTypeID( "ItmI" )));
+       }
+    }
+    return selectedLayers;
+ }
 
-function undo() {
-    executeAction(app.charIDToTypeID("undo", undefined, DialogModes.NO));
-};
+function selectLayerByIndex(index,add){ 
+    var ref = new ActionReference();
+    ref.putIndex(charIDToTypeID("Lyr "), index);
+    var desc = new ActionDescriptor();
+    desc.putReference(charIDToTypeID("null"), ref );
+    if(add) {
+        desc.putEnumerated( stringIDToTypeID( "selectionModifier" ), stringIDToTypeID( "selectionModifierType" ), stringIDToTypeID( "addToSelection" ) ) 
+    }
+    desc.putBoolean( charIDToTypeID( "MkVs" ), false ); 
+    try{
+        executeAction(charIDToTypeID("slct"), desc, DialogModes.NO );
+    }catch(e){}
+}
