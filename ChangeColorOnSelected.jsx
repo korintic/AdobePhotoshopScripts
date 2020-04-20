@@ -11,7 +11,7 @@ if (app.documents.length <= 0) {
 function ChangeLayerColors() {
     if (app.showColorPicker()) {
         var color = app.foregroundColor.rgb;
-        var selectedLayers = getSelectedLayersIndex();
+        var selectedLayers = getSelectedLayersIndices();
         var normalLayers = [];
         var invisibleLayers = [];
 
@@ -87,7 +87,7 @@ function setSolidFillColor(color) {
     executeAction(idsetd, desc1, DialogModes.NO);
 }
 
-function getSelectedLayersIndex(){
+function getSelectedLayersIndices(){
     var selectedLayers = new Array;
     var ref = new ActionReference();
     ref.putEnumerated( charIDToTypeID("Dcmn"), charIDToTypeID("Ordn"), charIDToTypeID("Trgt") );
