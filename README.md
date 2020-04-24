@@ -11,6 +11,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 * ColorIDPicker
 * AdvancedLayerRenamer
 * ChangeColorOnSelected
+* CleanLayerNames
 * UngroupNested
 * SetTextLayerContent
 * QuickExportPNG
@@ -79,6 +80,12 @@ This script provides a UI dialog for manipulating layer names and selecting laye
 
 Changes color on all selected layers by prompting a ColorPicker–dialog. Works on Solid Color layers, Text layers, Normal layers and Shape layers with solid fill set.
 If groups are selected applies color changes to all applicable layers in those groups as this is assumed intented behaviour when selecting groups.
+
+---
+
+### CleanLayerNames
+
+Simple script that renames selected layers by their blendmode and opacity. Also has options to set the layerstack color based on the blendmode type and add fill opacity to the name.
 
 ---
 
