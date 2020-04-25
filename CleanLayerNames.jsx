@@ -10,7 +10,7 @@ var setLayerColorByLayerType = true;
 var ignoreAdjustementLayers = true;
 var ignoreTextLayers = true;
 var ignoreShapeFillAndPatternLayers = false;
-var ignoreSmartObjects = true;
+var ignoreSmartObjects = false;
 var ignoreGrps = true;
 
 // Add opacity or fill amount as a suffix to layer name
