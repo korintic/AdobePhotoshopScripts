@@ -85,7 +85,16 @@ If groups are selected applies color changes to all applicable layers in those g
 
 ### CleanLayerNames
 
-Simple script that renames selected layers by their blendmode and opacity. Also has options to set the layerstack color based on the blendmode type and add fill opacity to the name.
+CleanLayerNames script will rename selected layers based on their blend mode. By default it will also add the layer's opacity as a suffix to the name and optionally also fill opacity can be added. 
+It has options for ignoring layers by their type when renaming.
+By default groups, adjustment layers and text layers are ignored.
+The script will also set the layer colors in the layer stack based on their blend mode and layer type. The blend mode colors are grouped by blend type groups. By default and the layer type color over writes the color set by the blend mode with red for adjustment layers. These colors can be changed by modifying the functions SetLayerColorToBlendMode(), SetLayerColorByLayerType() functions respectably.
+
+![CleanLayerNames1](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/CleanLayerNames1.png "CleanLayerNames1")
+
+![CleanLayerNames2](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/CleanLayerNames1.png "CleanLayerNames2")
+
+Note: The background layer is always ignored even if it is selected and if no layers are selected the script is ran on the top most layer in the layer stack.
 
 ---
 
