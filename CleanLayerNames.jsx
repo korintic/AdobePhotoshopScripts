@@ -1,7 +1,47 @@
-﻿var doc;
-var setLayerColors = true;
+﻿// This script renames the selected layers by their blend mode
+var doc;
+
+// Set layer color in the layer stack by the blend mode or layer type
+// If both are set to true layer type color overwrites the blend mode color
+var setLayerColorsByBlendMode = true;
+var setLayerColorByLayerType = true;
+
+// Set to "true" to ignore these layer types when renaming
+var ignoreAdjustementLayers = true;
+var ignoreTextLayers = true;
+var ignoreShapeFillAndPatternLayers = false;
+var ignoreSmartObjects = true;
+var ignoreGrps = true;
+
+// Add opacity or fill amount as a suffix to layer name
+// If both are set to "true" "O:" and "F:" are added in front of the percentage
 var addOpacityAmount = true;
 var addFillAmount = false;
+
+var adjustmentLayer = {
+    "BRIGHTNESSCONTRAST": LayerKind.BRIGHTNESSCONTRAST,
+    "LEVELS": LayerKind.LEVELS,
+    "CURVES": LayerKind.CURVES,
+    "EXPOSURE": LayerKind.EXPOSURE,
+    "VIBRANCE": LayerKind.VIBRANCE,
+    "HUESATURATION": LayerKind.HUESATURATION,
+    "COLORBALANCE": LayerKind.COLORBALANCE,
+    "BLACKANDWHITE": LayerKind.BLACKANDWHITE,
+    "PHOTOFILTER": LayerKind.PHOTOFILTER,
+    "CHANNELMIXER": LayerKind.CHANNELMIXER,
+    "COLORLOOKUP": LayerKind.COLORLOOKUP,
+    "INVERSION": LayerKind.INVERSION,
+    "POSTERIZE": LayerKind.POSTERIZE,
+    "THRESHOLD": LayerKind.THRESHOLD,
+    "GRADIENTMAP": LayerKind.GRADIENTMAP,
+    "SELECTIVECOLOR": LayerKind.SELECTIVECOLOR
+}
+
+var shapeFillAndPatternLayer = {
+    "SOLIDFILL": LayerKind.SOLIDFILL,
+    "GRADIENTFILL": LayerKind.GRADIENTFILL,
+    "PATTERNFILL": LayerKind.PATTERNFILL,
+}
 
 if (app.documents.length <= 0) {
     alert("No active document!");
@@ -15,11 +55,17 @@ function CleanLayerNames() {
     for (var i = 0; i < selectedLayersIndices.length; i++) {
         selectLayerByIndex(selectedLayersIndices[i], false);
         if(!doc.activeLayer.isBackgroundLayer) {
+            if(doc.activeLayer.typename === "LayerSet" && ignoreGrps) {
+                continue;
+            }
+            if(setLayerColorsByBlendMode) {
+                SetLayerColorToBlendMode(doc.activeLayer.blendMode.toString().split(".")[1]);
+            }
+            if(setLayerColorByLayerType) {
+                SetLayerColorByLayerType(doc.activeLayer.kind.toString().split(".")[1])
+            }
             var blendMode = doc.activeLayer.blendMode.toString();
             var str = upperCaseFirstLetter(blendMode.split(".")[1].toLowerCase())
-            if(setLayerColors) {
-                MatchLayerColorToBlendMode(str);
-            }
             str = CleanBlendModeName(str);
             var suffix = "";
             if(addOpacityAmount && addFillAmount) {
@@ -31,8 +77,19 @@ function CleanLayerNames() {
             else if(addFillAmount) {
                 suffix = Math.round(doc.activeLayer.fillOpacity) + "%";
             }
+            if(adjustmentLayer[doc.activeLayer.kind.toString().split(".")[1]] !== undefined && ignoreAdjustementLayers){
+                continue;
+            }
+            if(shapeFillAndPatternLayer[doc.activeLayer.kind.toString().split(".")[1]] !== undefined && ignoreShapeFillAndPatternLayers){
+                continue;
+            }
+            if(doc.activeLayer.kind === LayerKind.TEXT && ignoreTextLayers){
+                continue;
+            }
+            if(doc.activeLayer.kind === LayerKind.SMARTOBJECT && ignoreSmartObjects){
+                continue;
+            }
             doc.activeLayer.name = str + " " + suffix;
-            selectLayerByIndex( selectedLayersIndices[i], false)
         }
     }
     for (var i = 0; i < selectedLayersIndices.length; i++) {
@@ -162,122 +219,214 @@ function CleanBlendModeName(str) {
     return str;
 }
 
-function MatchLayerColorToBlendMode(str) {
+function SetLayerColorToBlendMode(str) {
     switch(String(str)){
         // Color names: "None",  "Rd  ", "Orng", "Ylw ", "Grn ", "Bl  ",  "Vlt ", "Gry "
         // None "None"
-        case "Normal":
+        case "NORMAL":
         SetActiveLayerColor("None")
         break;
 
         // Grey "Gry "
-        case "Dissolve":
+        case "DISSOLVE":
         SetActiveLayerColor("Gry ")
         break;
 
         // Blue "Bl  "
-        case "Multiply":
+        case "MULTIPLY":
         SetActiveLayerColor("Bl  ")
         break;
 
-        case "Darken":
+        case "DARKEN":
         SetActiveLayerColor("Bl  ")
         break;
 
-        case "Colorburn":
+        case "COLORBURN":
         SetActiveLayerColor("Bl  ")
         break;
 
-        case "Linearburn":
+        case "LINEARBURN":
         SetActiveLayerColor("Bl  ")
         break;
 
-        case "Darkercolor":
+        case "DARKERCOLOR":
         SetActiveLayerColor("Bl  ")
         break;
 
         // Yellow "Ylw "
-        case "Lighten":
+        case "LIGHTEN":
         SetActiveLayerColor("Ylw ")
         break;
 
-        case "Screen":
+        case "SCREEN":
         SetActiveLayerColor("Ylw ")
         break;
 
-        case "Colordodge":
+        case "COLORDODGE":
         SetActiveLayerColor("Ylw ")
         break;
 
-        case "Lineardodge":
+        case "LINEARDODGE":
         SetActiveLayerColor("Ylw ")
         break;
 
-        case "Lightercolor":
+        case "LIGHTERCOLOR":
         SetActiveLayerColor("Ylw ")
         break;
 
         // Orange "Orng"
-        case "Overlay":
+        case "OVERLAY":
         SetActiveLayerColor("Orng")
         break;
 
-        case "Softlight":
+        case "SOFTLIGHT":
         SetActiveLayerColor("Orng")
         break;
 
-        case "Hardlight":
+        case "HARDLIGHT":
         SetActiveLayerColor("Orng")
         break;
 
-        case "Vividlight":
+        case "VIVIDLIGHT":
         SetActiveLayerColor("Orng")
         break;
 
-        case "Linearlight":
+        case "LINEARLIGHT":
         SetActiveLayerColor("Orng")
         break;
 
-        case "Pinlight":
+        case "PINLIGHT":
         SetActiveLayerColor("Orng")
         break;
 
-        case "Hardmix":
+        case "HARDMIX":
         SetActiveLayerColor("Orng")
         break;
 
         // Green "Grn "
-        case "Difference":
+        case "DIFFERENCE":
         SetActiveLayerColor("Grn ")
         break;
 
-        case "Exclusion":
+        case "EXCLUSION":
         SetActiveLayerColor("Grn ")
         break;
 
-        case "Substact":
+        case "SUBSTACT":
         SetActiveLayerColor("Grn ")
         break;
 
-        case "Divide":
+        case "DIVIDE":
         SetActiveLayerColor("Grn ")
         break;
 
         // Violet "Vlt "
-        case "Hue":
+        case "HUE":
         SetActiveLayerColor("Vlt ")
         break;
 
-        case "Saturation":
+        case "SATURATION":
         SetActiveLayerColor("Vlt ")
         break;
 
-        case "Color":
+        case "COLOR":
         SetActiveLayerColor("Vlt ")
         break;
 
-        case "Luminosity":
+        case "LUMINOSITY":
         SetActiveLayerColor("Vlt ")
+        break;
+    }
+}
+
+function SetLayerColorByLayerType(str) {
+    switch(String(str)){
+        // Color names: "None",  "Rd  ", "Orng", "Ylw ", "Grn ", "Bl  ",  "Vlt ", "Gry "
+        case "NORMAL":
+        // SetActiveLayerColor("None")
+        break;
+
+        // Grey "Gry "
+        case "TEXT":
+        // SetActiveLayerColor("None")
+        break;
+
+        // Blue "Bl  "
+        case "SMARTOBJECT":
+        // SetActiveLayerColor("None")
+        break;
+
+        case "SOLIDFILL":
+        // SetActiveLayerColor("None")
+        break;
+
+        case "GRADIENTFILL":
+        // SetActiveLayerColor("None")
+        break;
+
+        case "PATTERNFILL":
+        // SetActiveLayerColor("None")
+        break;
+
+        // All adjustment layers layer colors are set to red
+        case "BRIGHTNESSCONTRAST":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "LEVELS":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "CURVES":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "EXPOSURE":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "VIBRANCE":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "HUESATURATION":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "COLORBALANCE":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "BLACKANDWHITE":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "CHANNELMIXER":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "COLORLOOKUP":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "INVERSION":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "POSTERIZE":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "THRESHOLD":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "GRADIENTMAP":
+        SetActiveLayerColor("Rd  ")
+        break;
+
+        case "SELECTIVECOLOR":
+        SetActiveLayerColor("Rd  ")
         break;
     }
 }
