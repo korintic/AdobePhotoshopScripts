@@ -92,7 +92,7 @@ The script will also set the layer colors in the layer stack based on their blen
 
 ![CleanLayerNames1](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/CleanLayerNames1.png "CleanLayerNames1")
 
-![CleanLayerNames2](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/CleanLayerNames1.png "CleanLayerNames2")
+![CleanLayerNames2](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/CleanLayerNames2.png "CleanLayerNames2")
 
 Note: The background layer is always ignored even if it is selected and if no layers are selected the script is ran on the top most layer in the layer stack.
 
