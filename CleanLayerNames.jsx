@@ -224,6 +224,10 @@ function CleanBlendModeName(str) {
         case "Hardmix":
         str= "Hard Mix"
         break;
+
+        case "Colorblend":
+        str= "Color"
+        break;
     }
     return str;
 }
@@ -338,7 +342,7 @@ function SetLayerColorToBlendMode(str) {
         SetActiveLayerColor("Vlt ")
         break;
 
-        case "COLOR":
+        case "COLORBLEND":
         SetActiveLayerColor("Vlt ")
         break;
 
