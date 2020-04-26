@@ -12,7 +12,7 @@ var ignoreTextLayers = true;
 var ignoreShapeFillAndPatternLayers = false;
 var ignoreSmartObjects = false;
 var ignoreGrps = true;
-var ignoreCustomLayerNames = false; //Ignore names not starting with the default "Layer" prefix on normal layers
+var ignoreCustomLayerNames = true; //Ignore layer names not starting with the photoshop defaults for that layer type
 
 // Add opacity or fill amount as a suffix to layer name
 // If both are set to "true" "O:" and "F:" are added in front of the percentage
@@ -22,6 +22,10 @@ var addFillAmount = false;
 String.prototype.startsWith = function (str) {
     return this.substring(0, str.length) === str;
 }
+
+var adjustmentLayerDefaultNames = ["Brightness/Contrast", "Levels", "Curves", "Exposure", "Vibrance", "Hue/Saturation", "Color Balance", "Black & White", "Photo Filter", "Channel Mixer", "Color Lookup", "Invert", "Posterize", "Threshold", "Gradient Map", "Selective Color"];
+
+var shapeLayerDefaultNames = ["Color Fill","Gradient Fill","Pattern Fill", "Rectangle", "Rounded Rectangle", "Ellipse","Polygon", "Shape"];
 
 var adjustmentLayer = {
     "BRIGHTNESSCONTRAST": LayerKind.BRIGHTNESSCONTRAST,
@@ -40,13 +44,13 @@ var adjustmentLayer = {
     "THRESHOLD": LayerKind.THRESHOLD,
     "GRADIENTMAP": LayerKind.GRADIENTMAP,
     "SELECTIVECOLOR": LayerKind.SELECTIVECOLOR
-}
+};
 
 var shapeFillAndPatternLayer = {
     "SOLIDFILL": LayerKind.SOLIDFILL,
     "GRADIENTFILL": LayerKind.GRADIENTFILL,
     "PATTERNFILL": LayerKind.PATTERNFILL,
-}
+};
 
 if (app.documents.length <= 0) {
     alert("No active document!");
@@ -82,8 +86,14 @@ function CleanLayerNames() {
             else if(addFillAmount) {
                 suffix = Math.round(doc.activeLayer.fillOpacity) + "%";
             }
-
-            if(!doc.activeLayer.name.startsWith("Layer") && ignoreCustomLayerNames) {
+            var nameStart = (doc.activeLayer.name.split(" ")[0]+" "+doc.activeLayer.name.split(" ")[1]);
+            if((!doc.activeLayer.name.startsWith("Layer") && doc.activeLayer.kind === LayerKind.NORMAL) && ignoreCustomLayerNames) {
+                continue;
+            }
+            if((!(new RegExp(shapeLayerDefaultNames.join("|")).test(nameStart)) && shapeFillAndPatternLayer[doc.activeLayer.kind.toString().split(".")[1]] !== undefined) && ignoreCustomLayerNames) {
+                continue;
+            }
+            if((!(new RegExp(adjustmentLayerDefaultNames.join("|")).test(nameStart)) && adjustmentLayer[doc.activeLayer.kind.toString().split(".")[1]] !== undefined) && ignoreCustomLayerNames) {
                 continue;
             }
             if(adjustmentLayer[doc.activeLayer.kind.toString().split(".")[1]] !== undefined && ignoreAdjustementLayers){
