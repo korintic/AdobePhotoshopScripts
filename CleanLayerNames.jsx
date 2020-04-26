@@ -12,11 +12,17 @@ var ignoreTextLayers = true;
 var ignoreShapeFillAndPatternLayers = false;
 var ignoreSmartObjects = false;
 var ignoreGrps = true;
+var ignoreCustomLayerNames = false; //Ignore names not starting with the default "Layer" prefix on normal layers
 
 // Add opacity or fill amount as a suffix to layer name
 // If both are set to "true" "O:" and "F:" are added in front of the percentage
 var addOpacityAmount = true;
 var addFillAmount = false;
+
+// var layerNameList = ["Layer", "Polygon", "Rectangle", ]
+String.prototype.startsWith = function (str) {
+    return this.substring(0, str.length) === str;
+}
 
 var adjustmentLayer = {
     "BRIGHTNESSCONTRAST": LayerKind.BRIGHTNESSCONTRAST,
@@ -76,6 +82,10 @@ function CleanLayerNames() {
             }
             else if(addFillAmount) {
                 suffix = Math.round(doc.activeLayer.fillOpacity) + "%";
+            }
+
+            if(!doc.activeLayer.name.startsWith("Layer") && ignoreCustomLayerNames) {
+                continue;
             }
             if(adjustmentLayer[doc.activeLayer.kind.toString().split(".")[1]] !== undefined && ignoreAdjustementLayers){
                 continue;
