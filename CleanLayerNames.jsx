@@ -19,7 +19,6 @@ var ignoreCustomLayerNames = false; //Ignore names not starting with the default
 var addOpacityAmount = true;
 var addFillAmount = false;
 
-// var layerNameList = ["Layer", "Polygon", "Rectangle", ]
 String.prototype.startsWith = function (str) {
     return this.substring(0, str.length) === str;
 }
