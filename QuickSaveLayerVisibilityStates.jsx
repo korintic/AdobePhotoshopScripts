@@ -29,7 +29,6 @@ function QuickSaveLayerVisibilityStates() {
     } catch (e) {}
 
     if (docStateExist) {
-
         HideAllLayers(doc.layers);
         ReturnDocState(GetDocState(doc.id), doc.layers);
         DeleteDocState(doc.id);
