@@ -8,14 +8,14 @@ These scripts can be used through File>Scripts>Browse or saving the scripts to *
 The latter way is necessary for binding scripts to hotkeys as scripts saved in the scripts folder are available through the *File>Scripts* menu and can be bound to a shortcut through *Edit>Keyboard Shortcuts => [Shortcuts for: Application Menus] File> Scripts> (Your script name)*.
 
 #### Scripts:
-* ColorIDPicker
-* AdvancedLayerRenamer
-* ChangeColorOnSelected
-* CleanLayerNames
-* QuickSaveLayerVisibilityStates
-* UngroupNested
-* SetTextLayerContent
-* QuickExportPNG
+* [ColorIDPicker](### ColorIDPicker)
+* [AdvancedLayerRenamer](### AdvancedLayerRenamer)
+* [ChangeColorOnSelected](### ChangeColorOnSelected)
+* [CleanLayerNames](### CleanLayerNames)
+* [QuickSaveLayerVisibilityStates](### QuickSaveLayerVisibilityStates)
+* [UngroupNested](### UngroupNested)
+* [SetTextLayerContent](### SetTextLayerContent)
+* [QuickExportPNG](### QuickExportPNG)
 
 ---
 
