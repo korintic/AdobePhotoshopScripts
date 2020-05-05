@@ -9,13 +9,13 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 
 #### Scripts:
 * [ColorIDPicker](#ColorIDPicker)
-* [AdvancedLayerRenamer](### AdvancedLayerRenamer)
-* [ChangeColorOnSelected](### ChangeColorOnSelected)
-* [CleanLayerNames](### CleanLayerNames)
-* [QuickSaveLayerVisibilityStates](### QuickSaveLayerVisibilityStates)
-* [UngroupNested](### UngroupNested)
-* [SetTextLayerContent](### SetTextLayerContent)
-* [QuickExportPNG](### QuickExportPNG)
+* [AdvancedLayerRenamer](#AdvancedLayerRenamer)
+* [ChangeColorOnSelected](#ChangeColorOnSelected)
+* [CleanLayerNames](#CleanLayerNames)
+* [QuickSaveLayerVisibilityStates](#QuickSaveLayerVisibilityStates)
+* [UngroupNested](#UngroupNested)
+* [SetTextLayerContent](#SetTextLayerContent)
+* [QuickExportPNG](#QuickExportPNG)
 
 ---
 
