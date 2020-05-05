@@ -12,6 +12,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 * AdvancedLayerRenamer
 * ChangeColorOnSelected
 * CleanLayerNames
+* QuickSaveLayerVisibilityStates
 * UngroupNested
 * SetTextLayerContent
 * QuickExportPNG
@@ -95,6 +96,12 @@ The script will also set the layer colors in the layer stack based on their blen
 ![CleanLayerNames2](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/CleanLayerNames2.png "CleanLayerNames2")
 
 Note: The background layer is always ignored even if it is selected and if no layers are selected the script is ran on the top most layer in the layer stack.
+
+---
+
+### QuickSaveLayerVisibilityStates
+
+Saves a snapshot of the active documents layer visibility states when run on a document for the first time in the session and returns the visibility states when ran again. In turns saving and returning states on subsequent times it is ran. This script is meant to be used bind to a shortcut for efficiency. Good for temporarily toggling layer visibilities on documents with lots of layers. Also has an option to turn on visibility of selected layers and turn off visibility of all others when the state is saved this can be enabled by changing **toggleVisibility** from **"false"** to **"true"**. This option is for the use cases where the script meant to be used similarly to the native functionality of alt+clicking the visibility icon in the layer stack.
 
 ---
 
