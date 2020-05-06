@@ -11,14 +11,18 @@ var docStateExist = false;
 var visibleLayerIDs = new ActionList();
 var desc = new ActionDescriptor();
 
-var toggleVisibility = false; //If true the visibility on all layers that are not selected will be turned off when saving visibility states
-var isSelected = false;
+var toggleVisibility = true; //If true the visibility on all layers that are not selected will be turned off when saving visibility states
 
 if (app.documents.length <= 0) {
     alert("No active document!");
 } else {
     doc = app.activeDocument;
-    QuickSaveLayerVisibilityStates();
+    if(doc.layers.length === 1 && doc.layers[0].isBackgroundLayer) {
+        alert("Operation cancelled\n Document only contains a background layer")
+    }
+    else {
+        QuickSaveLayerVisibilityStates();  
+    }
 }
 
 function QuickSaveLayerVisibilityStates() {
@@ -36,30 +40,25 @@ function QuickSaveLayerVisibilityStates() {
         GetVisibleLayerIDs(doc.layers);
         CreateDocState(doc.id, visibleLayerIDs);
         if (toggleVisibility) {
+            HideAllLayers(doc.layers);
             var selectedLayersIndices = GetSelectedLayersIndices();
-            HideUnselectedLayers(doc.layers, selectedLayersIndices);
+            RevealSelectedLayers(doc.layers, selectedLayersIndices);
         }
     }
 
 }
 
-function HideUnselectedLayers(layers, selectedLayerIndices) {
+function RevealSelectedLayers(layers, selectedLayerIndices) {
     for (var i = 0; i < layers.length; i++) {
         for (var j = 0; j < selectedLayerIndices.length; j++) {
-            if (layers[i].itemIndex - 1 === selectedLayerIndices[j]) {
-                isSelected = true;
+            if (layers[i].itemIndex === selectedLayerIndices[j]) {
+                layers[i].visible = true;
+                SetParentsVisible(layers[i]);
             }
         }
-        if (!isSelected) {
-            layers[i].visible = false;
-        } else {
-            SetParentsVisible(layers[i]);
-            layers[i].visible = true;
-        }
         if (layers[i].typename === "LayerSet") {
-            HideUnselectedLayers(layers[i].layers, selectedLayerIndices);
+            RevealSelectedLayers(layers[i].layers, selectedLayerIndices);
         }
-        isSelected = false;
     }
 }
 
@@ -128,23 +127,13 @@ function GetSelectedLayersIndices() {
         var c = desc.count;
         var selectedLayers = new Array();
         for (var i = 0; i < c; i++) {
-            try {
-                activeDocument.backgroundLayer;
-                selectedLayers.push(desc.getReference(i).getIndex());
-            } catch (e) {
-                selectedLayers.push(desc.getReference(i).getIndex() + 1);
-            }
+            selectedLayers.push(desc.getReference(i).getIndex()+1);
         }
     } else {
         var ref = new ActionReference();
         ref.putProperty(charIDToTypeID("Prpr"), charIDToTypeID("ItmI"));
         ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
-        try {
-            activeDocument.backgroundLayer;
-            selectedLayers.push(executeActionGet(ref).getInteger(charIDToTypeID("ItmI")) - 1);
-        } catch (e) {
-            selectedLayers.push(executeActionGet(ref).getInteger(charIDToTypeID("ItmI")));
-        }
+        selectedLayers.push(executeActionGet(ref).getInteger(charIDToTypeID("ItmI"))+1);
     }
     return selectedLayers;
 }
