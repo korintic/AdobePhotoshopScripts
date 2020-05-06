@@ -11,7 +11,7 @@ var docStateExist = false;
 var visibleLayerIDs = new ActionList();
 var desc = new ActionDescriptor();
 
-var toggleVisibility = true; //If true the visibility on all layers that are not selected will be turned off when saving visibility states
+var toggleVisibility = false; //If true the visibility on all layers that are not selected will be turned off when saving visibility states
 
 if (app.documents.length <= 0) {
     alert("No active document!");
