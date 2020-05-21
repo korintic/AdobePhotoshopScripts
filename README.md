@@ -91,6 +91,8 @@ Simple batch generation and export of image variants of the active document base
 
 ![ExportImageVariants](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ExportImageVariants.png "ExportImageVariants")
 
+---
+
 ### CleanLayerNames
 
 CleanLayerNames script will rename selected layers based on their blend mode. By default it will also add the layer's opacity as a suffix to the name and optionally also fill opacity can be added. 
