@@ -11,6 +11,7 @@ The latter way is necessary for binding scripts to hotkeys as scripts saved in t
 * [ColorIDPicker](#ColorIDPicker)
 * [AdvancedLayerRenamer](#AdvancedLayerRenamer)
 * [ChangeColorOnSelected](#ChangeColorOnSelected)
+* [ExportImageVariants](#ExportImageVariants)
 * [CleanLayerNames](#CleanLayerNames)
 * [QuickSaveLayerVisibilityStates](#QuickSaveLayerVisibilityStates)
 * [UngroupNested](#UngroupNested)
@@ -83,6 +84,12 @@ Changes color on all selected layers by prompting a ColorPicker–dialog. Works 
 If groups are selected applies color changes to all applicable layers in those groups as this is assumed intented behaviour when selecting groups.
 
 ---
+
+### ExportImageVariants
+
+Simple batch generation and export of image variants of the active document based on json data. Can update solid color/shape layer colors, text layer contents and smartobjects/linked images based on layer names.
+
+![ExportImageVariants](https://github.com/korintic/AdobePhotoshopScripts/blob/master/Images/ExportImageVariants.png "ExportImageVariants")
 
 ### CleanLayerNames
 
