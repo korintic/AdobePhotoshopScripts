@@ -101,7 +101,7 @@ function ShowUI() {
     g3.enabled = false;
 
     var useCustomFileNameCheckBox = w.add("checkbox", undefined, "Use Custom File Name");
-    useCustomFileNameCheckBox.helpTip = "Select destination folder for exported images \n\nKeywords: \nActive Document: [Document] \nVariant Name: [Variant] \nRunning Number: [Increment] \nDate: [YYYY] [YY] [MM] [DD] [HR] [MIN] \n\nIf neither [Variant] nor [Increment] are used the file names are not unique and will save over each other\n ";
+    useCustomFileNameCheckBox.helpTip = "Create custom file name for exported images \n\nKeywords: \nActive Document: [Document] \nVariant Name: [Variant] \nRunning Number: [Increment] \nDate: [YYYY] [YY] [MM] [DD] [HR] [MIN] \n\nIf neither [Variant] nor [Increment] are used the file names are not unique and will save over each other\n ";
 
     var g4 = w.add("group", undefined, undefined);
     g4.orientation = "row";
