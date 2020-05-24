@@ -87,7 +87,7 @@ function ShowUI() {
 
     var useSaveAllCheckBox = w.add("checkbox", undefined, "Save All");
     useSaveAllCheckBox.value = useSaveAll;
-    useSaveAllCheckBox.helpTip = "Save all variant images even if even if they contain invalid image links or hex codes";
+    useSaveAllCheckBox.helpTip = "Save all variant images even if they contain invalid image links or hex codes";
 
     var useImageFolderCheckBox = w.add("checkbox", undefined, "Use Source Image Folder");
 
