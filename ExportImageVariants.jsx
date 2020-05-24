@@ -18,11 +18,13 @@ String.prototype.trim = function () {
     return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 }
 // includes method for strings
-String.prototype.includes = function(search, start) {
+String.prototype.includes = function (search, start) {
     if (search instanceof RegExp) {
-      throw TypeError('first argument must not be a RegExp');
-    } 
-    if (start === undefined) { start = 0; }
+        throw TypeError('first argument must not be a RegExp');
+    }
+    if (start === undefined) {
+        start = 0;
+    }
     return this.indexOf(search, start) !== -1;
 }
 
@@ -154,7 +156,7 @@ function ShowUI() {
         }
     }
     customFileNameLocBox.onChange = function () {
-        if(!(customFileNameLocBox.text.includes("[Variant]") || customFileNameLocBox.text.includes("[Increment]"))) {
+        if (!(customFileNameLocBox.text.includes("[Variant]") || customFileNameLocBox.text.includes("[Increment]"))) {
             alert("Custom file name must include either [Variant] or [Increment] keyword otherwise variant file names won't be unique")
             customFileNameLocBox.active = true;
         }
@@ -185,24 +187,24 @@ function ShowUI() {
             fileLocBox.text = savedInput.File == undefined ? fileLocBox.text : savedInput.File;
             folderLocBox.text = savedInput.Folder == undefined ? folderLocBox.text : savedInput.Folder;
             imageFolderLocBox.text = savedInput.SourceImageFolder == undefined ? imageFolderLocBox.text : savedInput.SourceImageFolder;
-            customFileNameLocBox.text = savedInput.CustomFileName == undefined ?  customFileNameLocBox.text : savedInput.CustomFileName;
-            
+            customFileNameLocBox.text = savedInput.CustomFileName == undefined ? customFileNameLocBox.text : savedInput.CustomFileName;
+
             useSaveAllCheckBox.value = savedInput.UseSaveAll == undefined ? useSaveAllCheckBox.value : savedInput.UseSaveAll;
-            useSaveAll = savedInput.UseSaveAll== undefined ? useSaveAll : savedInput.UseSaveAll;
-            
+            useSaveAll = savedInput.UseSaveAll == undefined ? useSaveAll : savedInput.UseSaveAll;
+
             useImageFolderCheckBox.value = savedInput.UseImageFolder == undefined ? useImageFolderCheckBox.value : savedInput.UseImageFolder;
             useImageFolder = savedInput.UseImageFolder == undefined ? useImageFolder : savedInput.UseImageFolder;
             g3.enabled = savedInput.UseImageFolder == undefined ? g3.enabled : savedInput.UseImageFolder;
-            
+
             useCustomFileNameCheckBox.value = savedInput.UseCustomFileName == undefined ? useCustomFileNameCheckBox.value : savedInput.UseCustomFileName;
             useCustomFileName = savedInput.UseCustomFileName == undefined ? useCustomFileName : savedInput.UseCustomFileName;
             g4.enabled = savedInput.UseCustomFileName == undefined ? g4.enabled : savedInput.UseCustomFileName;
-            
+
             eraseCustomOptions(eIVInput);
         } catch (e) {}
     }
     w.onClose = function () {
-        saveInput(fileLocBox.text, folderLocBox.text, imageFolderLocBox.text, customFileNameLocBox.text, useSaveAllCheckBox.value, useImageFolderCheckBox.value ,useCustomFileNameCheckBox.value);
+        saveInput(fileLocBox.text, folderLocBox.text, imageFolderLocBox.text, customFileNameLocBox.text, useSaveAllCheckBox.value, useImageFolderCheckBox.value, useCustomFileNameCheckBox.value);
     }
     w.show();
 }
@@ -235,15 +237,14 @@ function CreateAndExportVariants(file) {
     for (var key in jsonObject) {
         if (jsonObject.hasOwnProperty(key)) {
             UpdateDocumentContents(doc.layers, key);
-            if(useSaveAll || isValid)
-            {
+            if (useSaveAll || isValid) {
                 var now = new Date();
                 var path = doc.name.split(".")[0] + "_" + key + "_" + GetTimeStamp() + ".png";
-                if(useCustomFileName) {
+                if (useCustomFileName) {
                     path = customFileName;
-                    path = path.replace("[Document]",doc.name.split(".")[0]);
+                    path = path.replace("[Document]", doc.name.split(".")[0]);
                     path = path.replace("[Variant]", key);
-                    path = path.replace("[Increment]", AddPadding(i,3));
+                    path = path.replace("[Increment]", AddPadding(i, 3));
                     path = path.replace("[YYYY]", now.getFullYear().toString());
                     path = path.replace("[YY]", now.getFullYear().toString().slice(-2));
                     path = path.replace("[MM]", AddPadding(now.getMonth() + 1, 2));
@@ -255,7 +256,7 @@ function CreateAndExportVariants(file) {
                 var saveFile = new File(savePath);
                 SaveAsPNG(saveFile)
                 exportedFiles.push(doc.name + "_" + key + "_" + GetTimeStamp() + ".png");
-                i ++;
+                i++;
             }
             isValid = true;
             doc.activeHistoryState = savedState;
@@ -318,18 +319,17 @@ function UpdateDocumentContents(layers, key) {
                 if (jsonObject[key][layers[i].name] !== null) {
                     var color = new SolidColor();
                     var hex = jsonObject[key][layers[i].name].trim();
-                    if(hex.charAt(0) === "#") {
-                        hex =   hex.substring(1)
+                    if (hex.charAt(0) === "#") {
+                        hex = hex.substring(1)
                     }
-                    if(hex.length === 6 && isHex(hex)) {
+                    if (hex.length === 6 && isHex(hex)) {
                         color.rgb.hexValue = hex;
                         doc.activeLayer = layers[i];
                         SetSolidFillColor(color);
-                    }
-                    else {
+                    } else {
                         isValid = false;
                         invalidHexColors.push("Variant: " + key + "\nLayer Name: " + layers[i].name + "\nInvalid Hex: " + jsonObject[key][layers[i].name]);
-                    } 
+                    }
                 }
             }
         }
@@ -466,12 +466,13 @@ function saveInput(file, folder, sourceImageFolder, customFileName, useSaveAll, 
 
 function getSavedInput() {
     var desc = app.getCustomOptions(eIVInput);
-    return {SourceImageFolder:desc.getString(eIVSourceImageFolder),
-            Folder:desc.getString(eIVExportFolder),
-            File: desc.getString(eIVFile),
-            CustomFileName: desc.getString(eIVCustomFileName),
-            UseSaveAll: desc.getBoolean(eIVUseSaveAll),
-            UseImageFolder: desc.getBoolean(eIVUseImageFolder),
-            UseCustomFileName: desc.getBoolean(eIVUseCustomFileName)
-            }
+    return {
+        SourceImageFolder: desc.getString(eIVSourceImageFolder),
+        Folder: desc.getString(eIVExportFolder),
+        File: desc.getString(eIVFile),
+        CustomFileName: desc.getString(eIVCustomFileName),
+        UseSaveAll: desc.getBoolean(eIVUseSaveAll),
+        UseImageFolder: desc.getBoolean(eIVUseImageFolder),
+        UseCustomFileName: desc.getBoolean(eIVUseCustomFileName)
+    }
 }
