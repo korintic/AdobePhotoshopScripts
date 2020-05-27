@@ -236,7 +236,7 @@ function CreateAndExportVariants(file) {
     var i = 1;
     for (var key in jsonObject) {
         if (jsonObject.hasOwnProperty(key)) {
-            UpdateDocumentContents(doc.layers, key);
+            TraverseLayers(doc.layers, key);
             if (useSaveAll || isValid) {
                 var now = new Date();
                 var path = doc.name.split(".")[0] + "_" + key + "_" + GetTimeStamp() + ".png";
@@ -280,56 +280,61 @@ function CreateAndExportVariants(file) {
     }
 }
 
-function UpdateDocumentContents(layers, key) {
+function TraverseLayers(layers, key) {
     for (var i = 0; i < layers.length; i++) {
         if (layers[i].typename === "LayerSet") {
-            UpdateDocumentContents(layers[i].layers);
-        } else if (layers[i].kind == LayerKind.TEXT && layers[i].visible) {
-            if (layers[i].name in jsonObject[key]) {
-                if (jsonObject[key][layers[i].name] !== null) {
-                    layers[i].textItem.contents = jsonObject[key][layers[i].name];
-                }
+            TraverseLayers(layers[i].layers, key);
+        }
+        UpdateLayerContents(layers[i], key);
+    }
+}
+
+function UpdateLayerContents(layer, key) {
+    if (layer.kind == LayerKind.TEXT && layer.visible) {
+        if (layer.name in jsonObject[key]) {
+            if (jsonObject[key][layer.name] !== null) {
+                layer.textItem.contents = jsonObject[key][layer.name];
             }
-        } else if (layers[i].kind == LayerKind.SMARTOBJECT && layers[i].visible) {
-            if (layers[i].name in jsonObject[key]) {
-                if (jsonObject[key][layers[i].name] !== null) {
-                    var path = jsonObject[key][layers[i].name];
-                    if (useImageFolder) {
-                        path = imageFolder.fsName;
-                        if (!path.endsWith("\\")) {
-                            path = path + "\\";
-                        }
-                        path = path + jsonObject[key][layers[i].name];
+        }
+    } else if (layer.kind == LayerKind.SMARTOBJECT && layer.visible) {
+        if (layer.name in jsonObject[key]) {
+            if (jsonObject[key][layer.name] !== null) {
+                var path = jsonObject[key][layer.name];
+                if (useImageFolder) {
+                    path = imageFolder.fsName;
+                    if (!path.endsWith("\\")) {
+                        path = path + "\\";
                     }
-                    doc.activeLayer = layers[i];
-                    var f = new File(path)
-                    if (f.exists) {
-                        ReplaceLinkedImage(path, true, doc.activeLayer);
-                    } else {
-                        isValid = false;
-                        invalidImageLinks.push("Variant: " + key + "\nLayer Name: " + layers[i].name + "\nLink: " + jsonObject[key][layers[i].name]);
-                    }
+                    path = path + jsonObject[key][layer.name];
+                }
+                doc.activeLayer = layer;
+                var f = new File(path)
+                if (f.exists) {
+                    ReplaceLinkedImage(path, true, doc.activeLayer);
                 } else {
                     isValid = false;
-                    invalidImageLinks.push("Variant: " + key + "\nLayer Name: " + layers[i].name + "\nLink: undefined");
+                    invalidImageLinks.push("Variant: " + key + "\nLayer Name: " + layer.name + "\nLink: " + jsonObject[key][layer.name]);
                 }
+            } else {
+                isValid = false;
+                invalidImageLinks.push("Variant: " + key + "\nLayer Name: " + layer.name + "\nLink: undefined");
             }
-        } else if (layers[i].kind == LayerKind.SOLIDFILL && layers[i].visible) {
-            if (layers[i].name in jsonObject[key]) {
-                if (jsonObject[key][layers[i].name] !== null) {
-                    var color = new SolidColor();
-                    var hex = jsonObject[key][layers[i].name].trim();
-                    if (hex.charAt(0) === "#") {
-                        hex = hex.substring(1)
-                    }
-                    if (hex.length === 6 && isHex(hex)) {
-                        color.rgb.hexValue = hex;
-                        doc.activeLayer = layers[i];
-                        SetSolidFillColor(color);
-                    } else {
-                        isValid = false;
-                        invalidHexColors.push("Variant: " + key + "\nLayer Name: " + layers[i].name + "\nInvalid Hex: " + jsonObject[key][layers[i].name]);
-                    }
+        }
+    } else if (layer.kind == LayerKind.SOLIDFILL && layer.visible) {
+        if (layer.name in jsonObject[key]) {
+            if (jsonObject[key][layer.name] !== null) {
+                var color = new SolidColor();
+                var hex = jsonObject[key][layer.name].trim();
+                if (hex.charAt(0) === "#") {
+                    hex = hex.substring(1)
+                }
+                if (hex.length === 6 && isHex(hex)) {
+                    color.rgb.hexValue = hex;
+                    doc.activeLayer = layer;
+                    SetSolidFillColor(color);
+                } else {
+                    isValid = false;
+                    invalidHexColors.push("Variant: " + key + "\nLayer Name: " + layer.name + "\nInvalid Hex: " + jsonObject[key][layer.name]);
                 }
             }
         }
