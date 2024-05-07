@@ -2,6 +2,15 @@
 
 Collection of simple Photoshops scripts written to improve workflow and learn Javascript and ExtendScripting.
 
+---
+### ⚠️ Important Notice
+
+As of 2024, these scripts have not been updated for approximately 5 years. Due to updates and changes in Adobe Photoshop's scripting and plugin architecture, these scripts might not function as intended with current or future versions of the software.
+
+**Users are advised to use these scripts with caution as they may require modifications to work correctly with newer versions of Adobe Photoshop.**
+
+---
+
 ## Photoshop Scripts
 
 These scripts can be used through File>Scripts>Browse or saving the scripts to *C:\Program Files\Adobe\ (your photoshop version e.g. Adobe Photoshop CC 2018)\Presets\Scripts* which requires admin rights.
